@@ -9,12 +9,8 @@ github.com/Azure/azure-sdk-for-go/sdk/azcore v1.1.2/go.mod h1:uGG2W01BaETf0Ozp+Q
 github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.1/go.mod h1:gLa1CL2RNE4s7M3yopJ/p0iq5DdY6Yv5ZUt9MTRZOQM=
 github.com/Azure/azure-sdk-for-go/sdk/internal v1.0.0/go.mod h1:eWRD7oawr1Mu1sLCawqVc0CUiF43ia3qQMxLscsKQ9w=
 github.com/AzureAD/microsoft-authentication-library-for-go v0.8.1/go.mod h1:4qFor3D/HDsvBME35Xy9rwW9DecL+M2sNw1ybjPtwA0=
-github.com/aiteung/atapi v0.1.1 h1:dJDCuOJ42ABugKWSeN86a6hc1XLVKU7uA7lQD8VmT84=
-github.com/aiteung/atapi v0.1.1/go.mod h1:kGz2vwWxDL8wmXEdMIJDBOxYKcZ4b/QR8D0Hi49DQw4=
 github.com/aiteung/atdb v0.1.7 h1:EV7vk5ld8i1wlrzf9N3FGDcvYvQz0dCnb0m2WCbRFOk=
 github.com/aiteung/atdb v0.1.7/go.mod h1:pxLum1XaWHcrspqu3n8zHKix2h5czOIiwAgIMKl3cX0=
-github.com/aiteung/atmessage v0.0.5 h1:gATjOfjQ1TWNLlb0lwlRLqUd8jxRdnU2bSYjuK9o6O8=
-github.com/aiteung/atmessage v0.0.5/go.mod h1:LZs1s6RBZYb6VU6R7RnbUS+v5Hr4R4PEEF5bJHiEE8o=
 github.com/aiteung/atmodel v0.0.4 h1:jz0/jPfVjiNxMGaP8Rfl+14cgJZ8uu1vg3a46L/nzBo=
 github.com/aiteung/atmodel v0.0.4/go.mod h1:IaEndLFAZYLsxeGLnviPLSUonnZ0jPle4HyTGtbztmI=
 github.com/aiteung/musik v0.0.5 h1:u97eBCwBL7Za68h9CgxXLaKzcbJEZtqQFQjSQ6/32u0=
@@ -44,11 +40,8 @@ github.com/golang-sql/sqlexp v0.1.0 h1:ZCD6MBpcuOVfGVqsEmY5/4FtYiKz6tSyUv9LPEDei
 github.com/golang-sql/sqlexp v0.1.0/go.mod h1:J4ad9Vo8ZCWQ2GMrC4UCQy1JpCbwU9m3EOqtpKwwwHI=
 github.com/golang/snappy v0.0.4 h1:yAGX7huGHXlcLOEtBnF4w7FQwA26wojNCwOYAEhLjQM=
 github.com/golang/snappy v0.0.4/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
-github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.5.5 h1:Khx7svrCpmxxtHBq5j2mp/xVjsi8hQMfNLvJFAlrGgU=
 github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
-github.com/google/go-querystring v1.1.0 h1:AnCroh3fv4ZBgVIf1Iwtovgjaw/GiKJo8M8yD/fhyJ8=
-github.com/google/go-querystring v1.1.0/go.mod h1:Kcdr2DB4koayq7X8pmAG4sNG59So17icRSOU623lUBU=
 github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
@@ -110,8 +103,8 @@ github.com/valyala/tcplisten v1.0.0 h1:rBHj/Xf+E1tRGZyWIWwJDiRY0zc1Js+CV5DqwacVS
 github.com/valyala/tcplisten v1.0.0/go.mod h1:T0xQ8SeCZGxckz9qRXTfG43PvQ/mcWh7FwZEA7Ioqkc=
 github.com/whatsauth/watoken v0.1.6 h1:sank9WgNUmecAgGOHCAcpfYCKzDZ31dBH/vDMLTyHOU=
 github.com/whatsauth/watoken v0.1.6/go.mod h1:bQpErZ47HgOi9JjRcCPQi7S0HlcO1c8JEzrX/DVCB4Y=
-github.com/whatsauth/whatsauth v0.1.83 h1:olXXRJ8+C5nz8WMXqAkQAvhURnt7eGbMP5N7iHw8S3s=
-github.com/whatsauth/whatsauth v0.1.83/go.mod h1:4Tua5PSQbpchFuWm/5lqM4Fc3FmJx6yQI/G88JQkqSE=
+github.com/whatsauth/whatsauth v0.1.82 h1:lwQBfQLSVbMtsGFycy6iqOCv2jEK4v51Yv3boEhhI7c=
+github.com/whatsauth/whatsauth v0.1.82/go.mod h1:ImMMSh+Rq49atqccMn6+xRnDu6OTztkGnW3RAesIOSE=
 github.com/xdg-go/pbkdf2 v1.0.0 h1:Su7DPu48wXMwC3bs7MCNG+z4FhcyEuz5dlvchbq0B0c=
 github.com/xdg-go/pbkdf2 v1.0.0/go.mod h1:jrpuAogTd400dnrH08LKmI/xc1MbPOebTwRqcT5RDeI=
 github.com/xdg-go/scram v1.1.2 h1:FHX5I5B4i4hKRVRBCFRxq1iQRej7WO3hhBuJf+UUySY=
