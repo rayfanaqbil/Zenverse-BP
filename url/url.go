@@ -17,5 +17,7 @@ func Web(page *fiber.App) {
 	page.Delete("/", controller.Sink)
 	page.Options("/", controller.Sink)
 
-	page.Get("/games", controller.GetGetAllGames)
+	page.Get("/games", controller.GetAllGames)
+	page.Put("/update/:id", controller.UpdateDataGames)
+
 }

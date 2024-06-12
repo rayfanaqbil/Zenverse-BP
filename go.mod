@@ -6,9 +6,10 @@ require (
 	github.com/aiteung/atdb v0.1.7
 	github.com/aiteung/musik v0.0.5
 	github.com/gofiber/fiber/v2 v2.52.4
-	github.com/rayfanaqbil/zenverse-BE v0.0.2
+	github.com/rayfanaqbil/zenverse-BE v0.0.3
 	github.com/whatsauth/whatsauth v0.1.82
 	go.mau.fi/whatsmeow v0.0.0-20240603101645-64bc969fbe78
+	go.mongodb.org/mongo-driver v1.15.0
 )
 
 require (
@@ -44,7 +45,6 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.mau.fi/libsignal v0.1.0 // indirect
 	go.mau.fi/util v0.4.2 // indirect
-	go.mongodb.org/mongo-driver v1.15.0 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
