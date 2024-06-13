@@ -20,5 +20,5 @@ func Web(page *fiber.App) {
 	page.Get("/games", controller.GetAllGames)
 	page.Get("/games/:id", controller.GetGamesByID)
 	page.Put("/update/:id", controller.UpdateDataGames)
-
+	page.Delete("/delete/:id", controller.DeleteGamesByID)
 }

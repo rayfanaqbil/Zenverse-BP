@@ -79,11 +79,11 @@ func UpdateDataGames(c *fiber.Ctx) error {
 		games.Name,
 		games.Rating,
 		games.Desc,
-		games.Genre,     
+		games.Genre,
 		games.Game_banner,
 		games.Preview,
-		games.Game_logo)  
-	if err != nil {
+		games.Game_logo)
+		if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
 			"message": err.Error(),
@@ -93,5 +93,36 @@ func UpdateDataGames(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status":  http.StatusOK,
 		"message": "Data successfully updated",
+	})
+}
+
+func DeleteGamesByID(c *fiber.Ctx) error {
+	id := c.Params("id")
+	if id == "" {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Wrong parameter",
+		})
+	}
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid id parameter",
+		})
+	}
+
+	err = cek.DeleteGamesByID(objID, config.Ulbimongoconn, "Games")
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": fmt.Sprintf("Error deleting data for id %s", id),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": fmt.Sprintf("Data with id %s deleted successfully", id),
 	})
 }
