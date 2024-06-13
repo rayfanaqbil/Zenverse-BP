@@ -80,9 +80,9 @@ func UpdateDataGames(c *fiber.Ctx) error {
 		games.Rating,
 		games.Desc,
 		games.Genre,     
-		games.GameBanner,
+		games.Game_banner,
 		games.Preview,
-		games.GameLogo)  
+		games.Game_logo)  
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
