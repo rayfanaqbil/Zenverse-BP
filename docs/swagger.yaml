@@ -1,4 +1,58 @@
 basePath: /
+definitions:
+  model.Developer:
+    properties:
+      _id:
+        example: "123456789"
+        type: string
+      bio:
+        example: tech otaku save the world
+        type: string
+      name:
+        example: HoYoverse
+        type: string
+    type: object
+  model.Games:
+    properties:
+      _id:
+        example: "123456789"
+        type: string
+      desc:
+        example: A tactical first-person shooter game developed by Riot Games
+        type: string
+      dev_name:
+        $ref: '#/definitions/model.Developer'
+      game_banner:
+        example: https://i.ibb.co.com/k1KdV7t/genshin-main-banner.png
+        type: string
+      game_logo:
+        example: https://i.ibb.co.com/Z6xFZP6/genshin-logo.png
+        type: string
+      genre:
+        example:
+        - Adventure Games
+        - Shooter
+        - Action
+        items:
+          type: string
+        type: array
+      link_games:
+        example: https://genshin.hoyoverse.com/id/
+        type: string
+      name:
+        example: Valorant
+        type: string
+      preview:
+        example: https://www.youtube.com/watch?v=qqnEjmnitgc
+        type: string
+      rating:
+        example: 123.12
+        type: number
+      release_date:
+        example: "2024-09-01T00:00:00Z"
+        format: date-time
+        type: string
+    type: object
 host: zenversegames-ba223a40f69e.herokuapp.com
 info:
   contact:
@@ -8,7 +62,49 @@ info:
   description: This is a sample swagger for Fiber
   title: TES SWAGGER ULBI
   version: "1.0"
-paths: {}
+paths:
+  /games:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil semua data games.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Games'
+      summary: Get All Data Games.
+      tags:
+      - Games
+  /games/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Ambil per ID data presensi.
+      parameters:
+      - description: Masukan ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Games'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get By ID Data Games.
+      tags:
+      - Games
 schemes:
 - https
 - http

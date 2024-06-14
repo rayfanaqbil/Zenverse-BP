@@ -16,5 +16,145 @@
     },
     "host": "zenversegames-ba223a40f69e.herokuapp.com",
     "basePath": "/",
-    "paths": {}
+    "paths": {
+        "/games": {
+            "get": {
+                "description": "Mengambil semua data games.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Games"
+                ],
+                "summary": "Get All Data Games.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Games"
+                        }
+                    }
+                }
+            }
+        },
+        "/games/{id}": {
+            "get": {
+                "description": "Ambil per ID data presensi.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Games"
+                ],
+                "summary": "Get By ID Data Games.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Masukan ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Games"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Developer": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string",
+                    "example": "123456789"
+                },
+                "bio": {
+                    "type": "string",
+                    "example": "tech otaku save the world"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "HoYoverse"
+                }
+            }
+        },
+        "model.Games": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string",
+                    "example": "123456789"
+                },
+                "desc": {
+                    "type": "string",
+                    "example": "A tactical first-person shooter game developed by Riot Games"
+                },
+                "dev_name": {
+                    "$ref": "#/definitions/model.Developer"
+                },
+                "game_banner": {
+                    "type": "string",
+                    "example": "https://i.ibb.co.com/k1KdV7t/genshin-main-banner.png"
+                },
+                "game_logo": {
+                    "type": "string",
+                    "example": "https://i.ibb.co.com/Z6xFZP6/genshin-logo.png"
+                },
+                "genre": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "Adventure Games",
+                        "Shooter",
+                        "Action"
+                    ]
+                },
+                "link_games": {
+                    "type": "string",
+                    "example": "https://genshin.hoyoverse.com/id/"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Valorant"
+                },
+                "preview": {
+                    "type": "string",
+                    "example": "https://www.youtube.com/watch?v=qqnEjmnitgc"
+                },
+                "rating": {
+                    "type": "number",
+                    "example": 123.12
+                },
+                "release_date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2024-09-01T00:00:00Z"
+                }
+            }
+        }
+    }
 }

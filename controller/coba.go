@@ -18,11 +18,31 @@ func Homepage(c *fiber.Ctx) error {
 	return c.JSON(ipaddr)
 }
 
+// GetAllGames godoc
+// @Summary Get All Data Games.
+// @Description Mengambil semua data games.
+// @Tags Games
+// @Accept json
+// @Produce json
+// @Success 200 {object} Games
+// @Router /games [get]
 func GetAllGames(c *fiber.Ctx) error { 
 	ps := cek.GetAllDataGames(config.Ulbimongoconn, "Games")
 	return c.JSON(ps)
 }
 
+// GetGamesByID godoc
+// @Summary Get By ID Data Games.
+// @Description Ambil per ID data presensi.
+// @Tags Games
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200 {object} Games
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /games/{id} [get]
 func GetGamesByID(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
