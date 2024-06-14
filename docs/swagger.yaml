@@ -1,0 +1,15 @@
+basePath: /
+host: zenversegames-ba223a40f69e.herokuapp.com
+info:
+  contact:
+    email: 714220044.@std.ulbi.ac.id
+    name: API Support
+    url: https://github.com/rayfanaqbil
+  description: This is a sample swagger for Fiber
+  title: TES SWAGGER ULBI
+  version: "1.0"
+paths: {}
+schemes:
+- https
+- http
+swagger: "2.0"

@@ -4,6 +4,7 @@ import (
 	"github.com/rayfanaqbil/Zenverse-BP/controller"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/swagger"
 )
 
 func Web(page *fiber.App) {
@@ -21,4 +22,5 @@ func Web(page *fiber.App) {
 	page.Get("/games/:id", controller.GetGamesByID)
 	page.Put("/update/:id", controller.UpdateDataGames)
 	page.Delete("/delete/:id", controller.DeleteGamesByID)
+	page.Get("/docs/*", swagger.HandlerDefault)
 }
