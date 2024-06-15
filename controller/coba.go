@@ -117,6 +117,18 @@ func InsertDataGames(c *fiber.Ctx) error {
 	})
 }
 
+// UpdateDataGames godoc
+// @Summary Update data Games.
+// @Description Ubah data games.
+// @Tags Games
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Param request body ReqGames true "Payload Body [RAW]"
+// @Success 200 {object} Games
+// @Failure 400
+// @Failure 500
+// @Router /update/{id} [put]
 func UpdateDataGames(c *fiber.Ctx) error {
 	db := config.Ulbimongoconn
 
