@@ -33,7 +33,7 @@ func GetAllGames(c *fiber.Ctx) error {
 
 // GetGamesByID godoc
 // @Summary Get By ID Data Games.
-// @Description Ambil per ID data presensi.
+// @Description Ambil per ID data games.
 // @Tags Games
 // @Accept json
 // @Produce json
@@ -72,6 +72,49 @@ func GetGamesByID(c *fiber.Ctx) error {
 		})
 	}
 	return c.JSON(ps)
+}
+
+// InsertDataGames godoc
+// @Summary Insert data Games.
+// @Description Input data games.
+// @Tags Games
+// @Accept json
+// @Produce json
+// @Param request body ReqGames true "Payload Body [RAW]" 
+// @Success 200 {object} Games
+// @Failure 400
+// @Failure 500
+// @Router /insert [post]
+func InsertDataGames(c *fiber.Ctx) error {
+	db := config.Ulbimongoconn
+	var games inimodel.Games
+	if err := c.BodyParser(&games); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	insertedID, err := cek.InsertGames(db, "Games",
+		games.Name,
+		games.Rating,
+		games.Desc,
+		games.Genre,
+		games.Dev_name,
+		games.Game_banner,
+		games.Preview,
+		games.Link_games,
+		games.Game_logo)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":      http.StatusOK,
+		"message":     "Data berhasil disimpan.",
+		"inserted_id": insertedID,
+	})
 }
 
 func UpdateDataGames(c *fiber.Ctx) error {
