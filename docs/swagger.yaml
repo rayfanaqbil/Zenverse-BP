@@ -103,7 +103,7 @@ info:
     name: API Support
     url: https://github.com/rayfanaqbil
   description: This is a sample swagger for Fiber
-  title: TES SWAGGER ULBI
+  title: TES SWAGGER Data Games
   version: "1.0"
 paths:
   /delete/{id}:

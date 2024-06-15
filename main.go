@@ -15,7 +15,7 @@ import (
 	_ "github.com/rayfanaqbil/Zenverse-BP/docs"
 )
 
-// @title TES SWAGGER ULBI
+// @title TES SWAGGER Data Games
 // @version 1.0
 // @description This is a sample swagger for Fiber
 

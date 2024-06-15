@@ -349,7 +349,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "zenversegames-ba223a40f69e.herokuapp.com",
 	BasePath:         "/",
 	Schemes:          []string{"https", "http"},
-	Title:            "TES SWAGGER ULBI",
+	Title:            "TES SWAGGER Data Games",
 	Description:      "This is a sample swagger for Fiber",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
