@@ -171,6 +171,17 @@ func UpdateDataGames(c *fiber.Ctx) error {
 	})
 }
 
+// DeleteGamesByID godoc
+// @Summary Delete data Games.
+// @Description Hapus data games.
+// @Tags Games
+// @Accept json
+// @Produce json
+// @Param id path string true "Masukan ID"
+// @Success 200
+// @Failure 400
+// @Failure 500
+// @Router /delete/{id} [delete]
 func DeleteGamesByID(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
