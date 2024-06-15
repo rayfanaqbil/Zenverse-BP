@@ -23,5 +23,5 @@ func Web(page *fiber.App) {
 	page.Put("/update/:id", controller.UpdateDataGames)
 	page.Delete("/delete/:id", controller.DeleteGamesByID)
 	page.Get("/docs/*", swagger.HandlerDefault)
-	page.Delete("/insert", controller.InsertDataGames)
+	page.Post("/insert", controller.InsertDataGames)
 }
