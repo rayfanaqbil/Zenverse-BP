@@ -98,6 +98,7 @@ func InsertDataGames(c *fiber.Ctx) error {
 		games.Name,
 		games.Rating,
 		games.Desc,
+		games.Status,
 		games.Genre,
 		games.Dev_name,
 		games.Game_banner,
@@ -154,6 +155,7 @@ func UpdateDataGames(c *fiber.Ctx) error {
 		games.Name,
 		games.Rating,
 		games.Desc,
+		games.Status,
 		games.Genre,
 		games.Game_banner,
 		games.Preview,
@@ -211,4 +213,24 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 		"status":  http.StatusOK,
 		"message": fmt.Sprintf("Data with id %s deleted successfully", id),
 	})
+}
+
+func Login(c *fiber.Ctx) error {
+	var loginDetails inimodel.Admin
+	if err := c.BodyParser(&loginDetails); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid request",
+		})
+	}
+
+	admin, err := cek.Login(config.Ulbimongoconn, "Admin", loginDetails.User_name, loginDetails.Password)
+	if err != nil {
+		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
+			"status":  http.StatusUnauthorized,
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(admin)
 }

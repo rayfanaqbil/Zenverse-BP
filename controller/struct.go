@@ -24,6 +24,12 @@ type Developer struct {
 	Bio  string             `bson:"dev_bio,omitempty" json:"bio,omitempty" example:"tech otaku save the world"`
 }
 
+type Admin struct {
+	ID   		primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	User_name	string 		       `bson:"user_name,omitempty" json:"user_name,omitempty"`
+	Password 	string			   `bson:"password,omitempty" json:"password,omitempty"`
+}
+
 type ReqGames struct {
 	Name        string             `bson:"name,omitempty" json:"name,omitempty" example:"Valorant"`
 	Rating      float64            `bson:"rating,omitempty" json:"rating,omitempty" example:"123.12"`
