@@ -35,7 +35,7 @@ type ReqGames struct {
 	Rating      float64            `bson:"rating,omitempty" json:"rating,omitempty" example:"123.12"`
 	Desc        string             `bson:"desc,omitempty" json:"desc,omitempty" example:"A tactical first-person shooter game developed by Riot Games"`
 	Genre       []string           `bson:"genre,omitempty" json:"genre,omitempty" example:"Adventure Games,Shooter,Action"`
-	Dev_name    ReqDeveloper          `bson:"dev_name,omitempty" json:"dev_name,omitempty"`
+	Dev_name    ReqDeveloper       `bson:"dev_name,omitempty" json:"dev_name,omitempty"`
 	Game_banner string             `bson:"game_banner,omitempty" json:"game_banner,omitempty" example:"https://i.ibb.co.com/k1KdV7t/genshin-main-banner.png"`
 	Preview     string             `bson:"preview,omitempty" json:"preview,omitempty" example:"https://www.youtube.com/watch?v=qqnEjmnitgc"`
 	Link_games  string             `bson:"link_games,omitempty" json:"link_games,omitempty" example:"https://genshin.hoyoverse.com/id/"`
