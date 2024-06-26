@@ -226,10 +226,10 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	admin, err := cek.Login(config.Ulbimongoconn, "Admin", loginDetails.User_name, loginDetails.Password)
+	_, err := cek.Login(config.Ulbimongoconn, "Admin", loginDetails.User_name, loginDetails.Password)
 	if err != nil {
-		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
-			"status":  http.StatusUnauthorized,
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
 			"message": err.Error(),
 		})
 	}
@@ -237,8 +237,7 @@ func Login(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status":  http.StatusOK,
 		"message": "Login successful",
-		"admin":   admin,
-})
+	})
 }
 
 func GetDataAdmin(c *fiber.Ctx) error { 
