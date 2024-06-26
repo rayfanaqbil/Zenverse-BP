@@ -25,4 +25,5 @@ func Web(page *fiber.App) {
 	page.Get("/docs/*", swagger.HandlerDefault)
 	page.Post("/insert", controller.InsertDataGames)
 	page.Post("/login", controller.Login)
+	page.Get("/admin", controller.GetDataAdmin)
 }

@@ -277,6 +277,10 @@ const docTemplate = `{
                     "type": "string",
                     "format": "date-time",
                     "example": "2024-09-01T00:00:00Z"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "Approverd"
                 }
             }
         },
@@ -337,6 +341,10 @@ const docTemplate = `{
                 "rating": {
                     "type": "number",
                     "example": 123.12
+                },
+                "status": {
+                    "type": "string",
+                    "example": "Approverd"
                 }
             }
         }

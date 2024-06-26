@@ -236,3 +236,8 @@ func Login(c *fiber.Ctx) error {
 
 	return c.Status(http.StatusOK).JSON(admin)
 }
+
+func GetDataAdmin(c *fiber.Ctx) error { 
+	ps := cek.GetDataAdmin(config.Ulbimongoconn, "Admin")
+	return c.JSON(ps)
+}

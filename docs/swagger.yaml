@@ -52,6 +52,9 @@ definitions:
         example: "2024-09-01T00:00:00Z"
         format: date-time
         type: string
+      status:
+        example: Approverd
+        type: string
     type: object
   controller.ReqDeveloper:
     properties:
@@ -95,6 +98,9 @@ definitions:
       rating:
         example: 123.12
         type: number
+      status:
+        example: Approverd
+        type: string
     type: object
 host: zenversegames-ba223a40f69e.herokuapp.com
 info:
