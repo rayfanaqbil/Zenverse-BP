@@ -9,7 +9,6 @@ type Games struct {
 	Name        string             `bson:"name,omitempty" json:"name,omitempty" example:"Valorant"`
 	Rating      float64            `bson:"rating,omitempty" json:"rating,omitempty" example:"123.12"`
 	Release     primitive.DateTime `bson:"release_date,omitempty" json:"release_date,omitempty" swaggertype:"string" example:"2024-09-01T00:00:00Z" format:"date-time"`
-	Status		string				`bson:"status,omitempty" json:"status,omitempty" example:"Approverd"`
 	Desc        string             `bson:"desc,omitempty" json:"desc,omitempty" example:"A tactical first-person shooter game developed by Riot Games"`
 	Genre       []string           `bson:"genre,omitempty" json:"genre,omitempty" example:"Adventure Games,Shooter,Action"`
 	Dev_name    Developer          `bson:"dev_name,omitempty" json:"dev_name,omitempty"`
@@ -35,7 +34,6 @@ type ReqGames struct {
 	Name        string             `bson:"name,omitempty" json:"name,omitempty" example:"Valorant"`
 	Rating      float64            `bson:"rating,omitempty" json:"rating,omitempty" example:"123.12"`
 	Desc        string             `bson:"desc,omitempty" json:"desc,omitempty" example:"A tactical first-person shooter game developed by Riot Games"`
-	Status		string				`bson:"status,omitempty" json:"status,omitempty" example:"Approverd"`
 	Genre       []string           `bson:"genre,omitempty" json:"genre,omitempty" example:"Adventure Games,Shooter,Action"`
 	Dev_name    ReqDeveloper       `bson:"dev_name,omitempty" json:"dev_name,omitempty"`
 	Game_banner string             `bson:"game_banner,omitempty" json:"game_banner,omitempty" example:"https://i.ibb.co.com/k1KdV7t/genshin-main-banner.png"`
