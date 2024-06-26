@@ -154,11 +154,13 @@ func UpdateDataGames(c *fiber.Ctx) error {
 		objectID,
 		games.Name,
 		games.Rating,
-		games.Desc,
 		games.Status,
+		games.Desc,
 		games.Genre,
+		games.Dev_name,
 		games.Game_banner,
 		games.Preview,
+		games.Link_games,
 		games.Game_logo)
 		if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
