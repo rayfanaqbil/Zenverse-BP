@@ -99,8 +99,6 @@ github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8/go.mod h1:HKlIX3XHQyzL
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/rayfanaqbil/zenverse-BE v0.1.0 h1:MXbbLCFQcQeQP/bHX0w/I8/er48YI8Y07C+PeRr5tH4=
-github.com/rayfanaqbil/zenverse-BE v0.1.0/go.mod h1:1cANjovwH1LABAuTkgEx7JjNNt76X3Rf29+RLSc4k9A=
 github.com/rayfanaqbil/zenverse-BE v0.2.0 h1:ynOwTaHRaX7uECtl6ytz6jxPhv27mndoB+Q5mhfNpZI=
 github.com/rayfanaqbil/zenverse-BE v0.2.0/go.mod h1:1cANjovwH1LABAuTkgEx7JjNNt76X3Rf29+RLSc4k9A=
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=

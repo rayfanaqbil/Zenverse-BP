@@ -234,7 +234,11 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(http.StatusOK).JSON(admin)
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Login successful",
+		"admin":   admin,
+})
 }
 
 func GetDataAdmin(c *fiber.Ctx) error { 
