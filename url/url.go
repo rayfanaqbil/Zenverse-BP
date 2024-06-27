@@ -26,5 +26,5 @@ func Web(page *fiber.App) {
 	page.Post("/insert", controller.InsertDataGames)
 	page.Post("/login", controller.Login)
 	page.Get("/admin", controller.GetDataAdmin)
-	page.Get("/games/name", controller.GameByNameSearch)
+	page.Get("/games/:name", controller.GameByNameSearch)
 }
