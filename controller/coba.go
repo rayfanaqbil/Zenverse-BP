@@ -245,20 +245,27 @@ func GetDataAdmin(c *fiber.Ctx) error {
 
 func SearchGameByName(c *fiber.Ctx) error {
     name := c.Query("name")
+    if name == "" {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "status":  fiber.StatusBadRequest,
+            "message": "Query parameter 'name' is required",
+        })
+    }
+
     db := config.Ulbimongoconn
     games, err := cek.GetGamesByName(db, "Games", name)
     if err != nil {
         if errors.Is(err, mongo.ErrNoDocuments) {
-            return c.Status(http.StatusNotFound).JSON(fiber.Map{
-                "status":  http.StatusNotFound,
+            return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+                "status":  fiber.StatusNotFound,
                 "message": fmt.Sprintf("Game with name '%s' not found", name),
             })
         }
-        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-            "status":  http.StatusInternalServerError,
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "status":  fiber.StatusInternalServerError,
             "message": fmt.Sprintf("Error searching game by name: %v", err),
         })
     }
 
-    return c.Status(http.StatusOK).JSON(games)
+    return c.Status(fiber.StatusOK).JSON(games)
 }
