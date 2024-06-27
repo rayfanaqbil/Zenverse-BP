@@ -19,6 +19,7 @@ func Web(page *fiber.App) {
 	page.Options("/", controller.Sink)
 
 	page.Get("/games", controller.GetAllGames)
+	page.Get("/games/search", controller.GetGameByName)
 	page.Get("/games/:id", controller.GetGamesByID)
 	page.Put("/update/:id", controller.UpdateDataGames)
 	page.Delete("/delete/:id", controller.DeleteGamesByID)
@@ -26,5 +27,4 @@ func Web(page *fiber.App) {
 	page.Post("/insert", controller.InsertDataGames)
 	page.Post("/login", controller.Login)
 	page.Get("/admin", controller.GetDataAdmin)
-	page.Get("/games/search", controller.GameByNameSearch)
 }
