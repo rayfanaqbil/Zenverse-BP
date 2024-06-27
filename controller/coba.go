@@ -243,7 +243,7 @@ func GetDataAdmin(c *fiber.Ctx) error {
 	return c.JSON(ps)
 }
 
-func SearchGameByName(c *fiber.Ctx) error {
+func GameByNameSearch(c *fiber.Ctx) error {
     name := c.Query("name")
     if name == "" {
         return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
