@@ -215,17 +215,6 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 	})
 }
 
-// Login godoc
-// @Summary Login
-// @Description Login to the system.
-// @Tags Admin
-// @Accept json
-// @Produce json
-// @Param loginDetails body inimodel.Admin true "Login details"
-// @Success 200 {object} map[string]interface{} "Login successful"
-// @Failure 400 {object} map[string]interface{} "Invalid request"
-// @Failure 500 {object} map[string]interface{} "Internal server error"
-// @Router /login [post]
 func Login(c *fiber.Ctx) error {
 	var loginDetails inimodel.Admin
 	if err := c.BodyParser(&loginDetails); err != nil {

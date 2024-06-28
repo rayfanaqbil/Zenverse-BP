@@ -106,6 +106,21 @@ info:
   title: TES SWAGGER Data Games
   version: "1.0"
 paths:
+  /admin:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil semua data admin.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Games'
+      summary: Get Data Admin.
+      tags:
+      - Admin
   /delete/{id}:
     delete:
       consumes:
