@@ -95,7 +95,7 @@ func InsertDataGames(c *fiber.Ctx) error {
 		})
 	}
 
-	if games.Name == "" || games.Desc == "" || len(games.Genre) == 0 || games.Dev_name.Name == "" ||
+	if games.Name == "" || games.Desc == "" || len(games.Genre) == 0 || games.Dev_name.Name == "" ||  games.Dev_name.Bio == "" ||
 		games.Game_banner == "" || games.Preview == "" || games.Link_games == "" || games.Game_logo == "" {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  http.StatusBadRequest,
