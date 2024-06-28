@@ -215,6 +215,17 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 	})
 }
 
+// Login godoc
+// @Summary Login
+// @Description Login to the system.
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param loginDetails body inimodel.Admin true "Login details"
+// @Success 200 {object} map[string]interface{} "Login successful"
+// @Failure 400 {object} map[string]interface{} "Invalid request"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /login [post]
 func Login(c *fiber.Ctx) error {
 	var loginDetails inimodel.Admin
 	if err := c.BodyParser(&loginDetails); err != nil {
@@ -238,10 +249,19 @@ func Login(c *fiber.Ctx) error {
 	})
 }
 
+// GetDataAdmin godoc
+// @Summary Get Data Admin.
+// @Description Mengambil semua data admin.
+// @Tags Games
+// @Accept json
+// @Produce json
+// @Success 200 {object} Games
+// @Router /admin [get]
 func GetDataAdmin(c *fiber.Ctx) error { 
 	ps := cek.GetDataAdmin(config.Ulbimongoconn, "Admin")
 	return c.JSON(ps)
 }
+
 
 func GetGameByName(c *fiber.Ctx) error {
     name := c.Query("name")
