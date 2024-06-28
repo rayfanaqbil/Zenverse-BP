@@ -218,7 +218,7 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 // Login godoc
 // @Summary Login
 // @Description Login to the system.
-// @Tags Auth
+// @Tags Admin
 // @Accept json
 // @Produce json
 // @Param loginDetails body inimodel.Admin true "Login details"
@@ -252,7 +252,7 @@ func Login(c *fiber.Ctx) error {
 // GetDataAdmin godoc
 // @Summary Get Data Admin.
 // @Description Mengambil semua data admin.
-// @Tags Games
+// @Tags Admin
 // @Accept json
 // @Produce json
 // @Success 200 {object} Games
