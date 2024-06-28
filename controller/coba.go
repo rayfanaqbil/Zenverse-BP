@@ -99,7 +99,7 @@ func InsertDataGames(c *fiber.Ctx) error {
 		value string
 		name  string
 	}{
-		{games.Name, "Name"},
+		{games.Name, "Name"},	
 		{games.Desc, "Desc"},
 		{games.Game_banner, "Game_banner"},
 		{games.Preview, "Preview"},

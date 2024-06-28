@@ -19,13 +19,14 @@ var origins = []string{
     "https://rayfanaqbil.github.io",
     "http://127.0.0.1:5500",
     "https://hrisz.github.io",
+    "/form",
 }
 
 var Internalhost string = os.Getenv("INTERNALHOST") + ":" + os.Getenv("PORT")
 
 var Cors = cors.Config{
     AllowOrigins:     strings.Join(origins[:], ","),
-    AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+    AllowHeaders:     "Origin, Content-Type, Accept, Authorization, Username",
     ExposeHeaders:    "Content-Length",
     AllowCredentials: true,
 }
