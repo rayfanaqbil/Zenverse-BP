@@ -95,36 +95,17 @@ func InsertDataGames(c *fiber.Ctx) error {
 		})
 	}
 
-	fields := []struct {
-		value string
-		name  string
-	}{
-		{games.Name, "Name"},	
-		{games.Desc, "Desc"},
-		{games.Game_banner, "Game_banner"},
-		{games.Preview, "Preview"},
-		{games.Link_games, "Link_games"},
-		{games.Game_logo, "Game_logo"},
-		{games.Dev_name.Name, "Dev_name"},
-		{games.Dev_name.Bio, "Bio"},
-	}
-
-	// Validasi input
-	for _, field := range fields {
-		if field.value == "" {
-			return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-				"status":  http.StatusBadRequest,
-				"message": "Fill all the form.",
-				"field":   field.name,
-			})
-		}
-	}
-
-	if games.Rating == 0 || len(games.Genre) == 0 {
+	if games.Name == "" || games.Desc == "" || len(games.Genre) == 0 || games.Dev_name.Name == "" ||
+		games.Game_banner == "" || games.Preview == "" || games.Link_games == "" || games.Game_logo == "" {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  http.StatusBadRequest,
 			"message": "Fill all the form.",
 		})
+	}
+
+	// Set default value for Rating if not provided
+	if games.Rating == 0 {
+		games.Rating = 1.0
 	}
 
 	insertedID, err := cek.InsertGames(db, "Games",
