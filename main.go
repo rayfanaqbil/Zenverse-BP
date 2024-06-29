@@ -28,8 +28,9 @@ import (
 // @schemes https http
 
 func main() {
+	db := config.Ulbimongoconn
 	site := fiber.New(config.Iteung)
 	site.Use(cors.New(config.Cors))
-	url.Web(site)
+	url.Web(site, db)
 	log.Fatal(site.Listen(musik.Dangdut()))
 }
