@@ -103,7 +103,6 @@ func InsertDataGames(c *fiber.Ctx) error {
 		})
 	}
 
-	// Set default value for Rating if not provided
 	if games.Rating == 0 {
 		games.Rating = 1.0
 	}
@@ -226,29 +225,6 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status":  http.StatusOK,
 		"message": fmt.Sprintf("Data with id %s deleted successfully", id),
-	})
-}
-
-func Login(c *fiber.Ctx) error {
-	var loginDetails inimodel.Admin
-	if err := c.BodyParser(&loginDetails); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"status":  http.StatusBadRequest,
-			"message": "Invalid request",
-		})
-	}
-
-	_, err := cek.Login(config.Ulbimongoconn, "Admin", loginDetails.User_name, loginDetails.Password)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": err.Error(),
-		})
-	}
-
-	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"status":  http.StatusOK,
-		"message": "Login successful",
 	})
 }
 
