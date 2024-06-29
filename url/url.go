@@ -29,6 +29,7 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Post("/insert", controller.InsertDataGames)
     page.Post("/login", handlers.Login)
     page.Get("/admin", controller.GetDataAdmin)
+	page.Post("/api/save-token", handlers.SaveToken)
 
     // Protected routes
     protected := page.Group("/api", middleware.Protected(db))

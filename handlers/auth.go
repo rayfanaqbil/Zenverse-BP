@@ -2,10 +2,11 @@ package handlers
 
 import (
     "net/http"
+
     "github.com/gofiber/fiber/v2"
-	cek "github.com/rayfanaqbil/zenverse-BE/module"
+    cek "github.com/rayfanaqbil/zenverse-BE/module"
 	inimodel "github.com/rayfanaqbil/zenverse-BE/model"
-	iniconfig "github.com/rayfanaqbil/zenverse-BE/config"
+    iniconfig "github.com/rayfanaqbil/zenverse-BE/config"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
 )
 
