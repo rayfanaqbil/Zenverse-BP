@@ -3,7 +3,8 @@ package handlers
 import (
     "net/http"
     "github.com/gofiber/fiber/v2"
-    cek "github.com/rayfanaqbil/zenverse-BE/module"
+    "github.com/rayfanaqbil/zenverse-BE/module"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func SaveToken(c *fiber.Ctx) error {
@@ -19,7 +20,7 @@ func SaveToken(c *fiber.Ctx) error {
         })
     }
 
-    if err := cek.SaveTokenToDatabase(tokenReq.Token); err != nil {
+    if err := module.SaveTokenToDatabase(c.Locals("db").(*mongo.Database), tokenReq.Token); err != nil {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
             "status":  http.StatusInternalServerError,
             "message": "Failed to save token",

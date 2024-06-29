@@ -5,9 +5,9 @@ import (
 
     "github.com/gofiber/fiber/v2"
     cek "github.com/rayfanaqbil/zenverse-BE/module"
-	inimodel "github.com/rayfanaqbil/zenverse-BE/model"
+    inimodel "github.com/rayfanaqbil/zenverse-BE/model"
+    "github.com/rayfanaqbil/Zenverse-BP/config"
     iniconfig "github.com/rayfanaqbil/zenverse-BE/config"
-	"github.com/rayfanaqbil/Zenverse-BP/config"
 )
 
 func Login(c *fiber.Ctx) error {
@@ -39,7 +39,7 @@ func Login(c *fiber.Ctx) error {
     if err := cek.UpdateAdminToken(config.Ulbimongoconn, admin); err != nil {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
             "status":  http.StatusInternalServerError,
-            "message": "Failed to save token",
+            "message": "Failed to save token to database",
         })
     }
 
