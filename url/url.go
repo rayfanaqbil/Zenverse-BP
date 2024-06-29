@@ -29,10 +29,10 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Post("/insert", controller.InsertDataGames)
     page.Post("/login", handlers.Login)
     page.Get("/admin", controller.GetDataAdmin)
-	page.Post("/api/save-token", handlers.SaveToken)
+	page.Post("/login/save-token", handlers.SaveToken)
 
     // Protected routes
-    protected := page.Group("/api", middleware.Protected(db))
+    protected := page.Group("/login", middleware.Protected(db))
     protected.Get("/protected-route", func(c *fiber.Ctx) error {
         username := c.Locals("username")
         return c.JSON(fiber.Map{"message": "This is a protected route", "user": username})
