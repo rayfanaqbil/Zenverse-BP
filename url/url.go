@@ -1,3 +1,5 @@
+// url.go
+
 package url
 
 import (
@@ -7,9 +9,10 @@ import (
 
     "github.com/gofiber/fiber/v2"
     "github.com/gofiber/swagger"
+    "go.mongodb.org/mongo-driver/mongo"
 )
 
-func Web(page *fiber.App) {
+func Web(page *fiber.App, db *mongo.Database) {
     page.Get("/", controller.Sink)
     page.Post("/", controller.Sink)
     page.Put("/", controller.Sink)
@@ -28,7 +31,7 @@ func Web(page *fiber.App) {
     page.Get("/admin", controller.GetDataAdmin)
 
     // Protected routes
-    protected := page.Group("/api", middleware.Protected())
+    protected := page.Group("/api", middleware.Protected(db))
     protected.Get("/protected-route", func(c *fiber.Ctx) error {
         username := c.Locals("username")
         return c.JSON(fiber.Map{"message": "This is a protected route", "user": username})

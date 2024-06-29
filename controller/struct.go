@@ -28,6 +28,7 @@ type Admin struct {
 	ID   		primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	User_name	string 		       `bson:"user_name,omitempty" json:"user_name,omitempty" example:"Timmy"`
 	Password 	string			   `bson:"password,omitempty" json:"password,omitempty" example:"timmy123"`
+	Token    	string 				`bson:"token,omitempty" json:"token,omitempty"`
 }
 
 type ReqGames struct {

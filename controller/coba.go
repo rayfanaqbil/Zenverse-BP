@@ -237,10 +237,26 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 // @Success 200 {object} Games
 // @Router /admin [get]
 func GetDataAdmin(c *fiber.Ctx) error { 
-	ps := cek.GetDataAdmin(config.Ulbimongoconn, "Admin")
-	return c.JSON(ps)
-}
+    username := c.Query("username")
+    password := c.Query("password")
 
+    if username == "" || password == "" {
+        return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+            "status":  http.StatusBadRequest,
+            "message": "Missing username or password",
+        })
+    }
+
+    admin, err := cek.GetDataAdmin(config.Ulbimongoconn, username, password)
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Failed to get admin data",
+        })
+    }
+
+    return c.Status(http.StatusOK).JSON(admin)
+}
 
 func GetGameByName(c *fiber.Ctx) error {
     name := c.Query("name")

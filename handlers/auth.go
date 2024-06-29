@@ -18,7 +18,7 @@ func Login(c *fiber.Ctx) error {
         })
     }
 
-    _, err := cek.Login(config.Ulbimongoconn, "Admin", loginDetails.User_name, loginDetails.Password)
+    admin, err := cek.Login(config.Ulbimongoconn, "Admin", loginDetails.User_name, loginDetails.Password)
     if err != nil {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
             "status":  http.StatusInternalServerError,
@@ -31,6 +31,14 @@ func Login(c *fiber.Ctx) error {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
             "status":  http.StatusInternalServerError,
             "message": "Failed to generate token",
+        })
+    }
+
+    admin.Token = token
+    if err := cek.UpdateAdminToken(config.Ulbimongoconn, admin); err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Failed to save token",
         })
     }
 
