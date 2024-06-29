@@ -28,9 +28,13 @@ import (
 // @schemes https http
 
 func main() {
-	db := config.Ulbimongoconn
-	site := fiber.New(config.Iteung)
-	site.Use(cors.New(config.Cors))
-	url.Web(site, db)
-	log.Fatal(site.Listen(musik.Dangdut()))
+    db := config.Ulbimongoconn 
+    site := fiber.New(config.Iteung)
+    site.Use(cors.New(config.Cors))
+    site.Use(func(c *fiber.Ctx) error {
+        c.Locals("db", db)
+        return c.Next()
+    })
+    url.Web(site, db)
+    log.Fatal(site.Listen(musik.Dangdut()))
 }

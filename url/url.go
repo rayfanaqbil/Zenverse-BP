@@ -35,6 +35,6 @@ func Web(page *fiber.App, db *mongo.Database) {
     protected := page.Group("/api", middleware.Protected(db))
     protected.Get("/protected-route", func(c *fiber.Ctx) error {
         username := c.Locals("username")
-        return c.JSON(fiber.Map{"message": "Ini adalah rute terlindungi", "user": username})
+        return c.JSON(fiber.Map{"message": "This is a protected route", "user": username})
     })
 }

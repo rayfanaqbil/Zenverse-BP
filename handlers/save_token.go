@@ -2,7 +2,6 @@ package handlers
 
 import (
     "net/http"
-
     "github.com/gofiber/fiber/v2"
     cek "github.com/rayfanaqbil/zenverse-BE/module"
 )
