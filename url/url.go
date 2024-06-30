@@ -28,8 +28,8 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Get("/docs/*", swagger.HandlerDefault)
     page.Post("/insert", controller.InsertDataGames)
     page.Get("/admin", controller.GetDataAdmin)
+    page.Post("/login", handler.Login)
 
     page.Use(middleware.AuthMiddleware())
-    page.Post("/login", handler.Login)
     page.Post("/logout", handler.Logout)
 }
