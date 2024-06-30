@@ -3,13 +3,13 @@
 package url
 
 import (
-    "github.com/rayfanaqbil/Zenverse-BP/controller"
-    "github.com/rayfanaqbil/Zenverse-BP/handlers"
-    "github.com/rayfanaqbil/Zenverse-BP/middleware"
+	"github.com/rayfanaqbil/Zenverse-BP/controller"
+	"github.com/rayfanaqbil/Zenverse-BP/handler"
 
-    "github.com/gofiber/fiber/v2"
-    "github.com/gofiber/swagger"
-    "go.mongodb.org/mongo-driver/mongo"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/swagger"
+	"go.mongodb.org/mongo-driver/mongo"
+    "github.com/rayfanaqbil/Zenverse-BP/middleware"
 )
 
 func Web(page *fiber.App, db *mongo.Database) {
@@ -27,14 +27,9 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Delete("/delete/:id", controller.DeleteGamesByID)
     page.Get("/docs/*", swagger.HandlerDefault)
     page.Post("/insert", controller.InsertDataGames)
-    page.Post("/login", handlers.Login)
     page.Get("/admin", controller.GetDataAdmin)
-	page.Post("/login/save-token", handlers.SaveToken)
 
-    // Protected routes
-    protected := page.Group("/login", middleware.Protected(db))
-    protected.Get("/protected-route", func(c *fiber.Ctx) error {
-        username := c.Locals("username")
-        return c.JSON(fiber.Map{"message": "This is a protected route", "user": username})
-    })
+    page.Use(middleware.AuthMiddleware())
+    page.Post("/login", handler.Login)
+    page.Post("/logout", handler.Logout)
 }

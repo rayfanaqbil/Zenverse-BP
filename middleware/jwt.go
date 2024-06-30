@@ -1,37 +1,45 @@
 package middleware
 
 import (
+    "context"
+    "time"
     "github.com/gofiber/fiber/v2"
-    "github.com/golang-jwt/jwt/v4"
-    "github.com/rayfanaqbil/zenverse-BE/config"
-    "github.com/rayfanaqbil/zenverse-BE/module"
-    "go.mongodb.org/mongo-driver/mongo"
+    "github.com/dgrijalva/jwt-go"
+    inimodel "github.com/rayfanaqbil/zenverse-BE/model"
+    "github.com/rayfanaqbil/Zenverse-BP/config"
+    "go.mongodb.org/mongo-driver/bson"
 )
 
-func Protected(db *mongo.Database) fiber.Handler {
+var jwtKey = []byte("ZnVRsERfnHRsZ")
+
+func AuthMiddleware() fiber.Handler {
     return func(c *fiber.Ctx) error {
-        tokenString := c.Get("Authorization")
-
-        if tokenString == "" {
-            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing JWT"})
+        tokenStr := c.Get("Authorization")
+        if tokenStr == "" {
+            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing token"})
         }
 
-        token, err := config.ValidateJWT(tokenString)
-        if err != nil {
-            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or expired JWT"})
+        tokenStr = tokenStr[len("Bearer "):]
+        claims := &inimodel.Claims{}
+        token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
+            return jwtKey, nil
+        })
+        if err != nil || !token.Valid {
+            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token"})
         }
 
-        if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-            user_name := claims["username"].(string)
-            admin, err := module.GetDataAdmin(db, user_name, "")
-            if err != nil || admin.Token != tokenString {
-                return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token"})
-            }
-
-            c.Locals("username", user_name)
-            return c.Next()
+        ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+        defer cancel()
+        db := config.Ulbimongoconn
+        var user struct {
+            Token string `bson:"token"`
+        }
+        err = db.Collection("Admin").FindOne(ctx, bson.M{"user_name": claims.UserName}).Decode(&user)
+        if err != nil || user.Token != tokenStr {
+            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token"})
         }
 
-        return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or expired JWT"})
+        c.Locals("username", claims.UserName)
+        return c.Next()
     }
 }
