@@ -15,9 +15,7 @@ func AuthMiddleware() fiber.Handler {
             return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing token"})
         }
 
-        // Remove the "Bearer " prefix
         tokenStr = tokenStr[len("Bearer "):]
-
         claims := &model.Admin{}
         token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
             return jwtKey, nil
