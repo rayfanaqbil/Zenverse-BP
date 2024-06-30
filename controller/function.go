@@ -237,7 +237,7 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 // @Success 200 {object} Games
 // @Router /admin [get]
 func GetDataToken(c *fiber.Ctx) error { 
-    token:= c.Query("token")
+    token := c.Get("Authorization")
     if token == "" {
         return c.Status(http.StatusBadRequest).JSON(fiber.Map{
             "status":  http.StatusBadRequest,
@@ -245,6 +245,8 @@ func GetDataToken(c *fiber.Ctx) error {
         })
     }
 
+    token = token[len("Bearer "):]
+    
     admin, err := cek.GetDataToken(config.Ulbimongoconn, token)
     if err != nil {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
