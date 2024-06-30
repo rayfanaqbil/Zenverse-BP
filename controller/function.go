@@ -236,26 +236,29 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} Games
 // @Router /admin [get]
-func GetDataToken(c *fiber.Ctx) error { 
-    token := c.Get("Authorization")
-    if token == "" {
-        return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-            "status":  http.StatusBadRequest,
-            "message": "Missing token",
-        })
-    }
+func GetDataToken(c *fiber.Ctx) error {
+	token := c.Get("Authorization")
+	if token == "" {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Missing token",
+		})
+	}
 
-    token = token[len("Bearer "):]
-    
-    admin, err := cek.GetDataToken(config.Ulbimongoconn, token)
-    if err != nil {
-        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-            "status":  http.StatusInternalServerError,
-            "message": "Failed to get admin token",
-        })
-    }
+	token = token[len("Bearer "):]
+	fmt.Println("Received token:", token)
 
-    return c.Status(http.StatusOK).JSON(admin)
+	admin, err := cek.GetDataToken(config.Ulbimongoconn, token)
+	if err != nil {
+		fmt.Println("Error fetching token from DB:", err)
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Failed to get admin token",
+		})
+	}
+
+	fmt.Println("Admin data retrieved:", admin)
+	return c.Status(http.StatusOK).JSON(admin)
 }
 
 func GetGameByName(c *fiber.Ctx) error {
