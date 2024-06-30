@@ -15,16 +15,18 @@ func AuthMiddleware() fiber.Handler {
             return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing token"})
         }
 
+        // Remove the "Bearer " prefix
         tokenStr = tokenStr[len("Bearer "):]
 
-        claims := &model.Claims{}
+        claims := &model.Admin{}
         token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
             return jwtKey, nil
         })
         if err != nil || !token.Valid {
             return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token"})
         }
-        c.Locals("username", claims.UserName)
+
+        c.Locals("username", claims.User_name)
         return c.Next()
     }
 }
