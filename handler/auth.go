@@ -1,11 +1,15 @@
 package handler
 
 import (
+    "context"
     "net/http"
+    "time"
+
     "github.com/gofiber/fiber/v2"
     "github.com/rayfanaqbil/Zenverse-BP/config"
     cek "github.com/rayfanaqbil/zenverse-BE/module"
     inimodel "github.com/rayfanaqbil/zenverse-BE/model"
+    "go.mongodb.org/mongo-driver/bson"
 )
 
 func Login(c *fiber.Ctx) error {
@@ -41,7 +45,11 @@ func Login(c *fiber.Ctx) error {
 func Logout(c *fiber.Ctx) error {
     username := c.Locals("username").(string)
 
-    err := cek.Logout(config.Ulbimongoconn, "Admin", username)
+    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
+    db := config.Ulbimongoconn
+
+    _, err := db.Collection("Admin").UpdateOne(ctx, bson.M{"user_name": username}, bson.M{"$unset": bson.M{"token": ""}})
     if err != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
             "status":  fiber.StatusInternalServerError,
