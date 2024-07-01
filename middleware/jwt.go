@@ -3,7 +3,7 @@ package middleware
 import (
     "github.com/gofiber/fiber/v2"
     "github.com/dgrijalva/jwt-go"
-    "github.com/rayfanaqbil/zenverse-BE/model"
+    inimodel "github.com/rayfanaqbil/zenverse-BE/model"
 )
 
 var jwtKey = []byte("ZnVRsERfnHRsZ")
@@ -17,7 +17,7 @@ func AuthMiddleware() fiber.Handler {
 
         tokenStr = tokenStr[len("Bearer "):]
 
-        claims := &model.Admin{}
+        claims := &inimodel.Admin{}
         token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
             return jwtKey, nil
         })
