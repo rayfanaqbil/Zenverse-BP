@@ -2,7 +2,6 @@ package controller
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"github.com/dgrijalva/jwt-go"
 )
 
 type Games struct {
@@ -30,7 +29,11 @@ type Admin struct {
 	User_name	string 		       `bson:"user_name,omitempty" json:"user_name,omitempty"`
 	Password 	string			   `bson:"password,omitempty" json:"password,omitempty"`
 	Token     	string             `bson:"token,omitempty" json:"token,omitempty"`
-	jwt.StandardClaims
+}
+
+type Credentials struct {
+    Username string 				`bson:"user_name,omitempty" json:"username,omitempty"`
+    Password string 				`bson:"password,omitempty" json:"password,omitempty"`
 }
 
 type ReqGames struct {

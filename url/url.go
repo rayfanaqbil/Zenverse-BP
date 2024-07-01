@@ -30,7 +30,6 @@ func Web(page *fiber.App, db *mongo.Database) {
 
     page.Use(middleware.AuthMiddleware())
     page.Get("/token", controller.GetDataToken)
-    page.Post("/logout", handler.Logout)
-    page.Post("/login", handler.Login)
+    page.Post("/login", handler.Login)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 
 }

@@ -6,8 +6,8 @@ import (
 	"github.com/aiteung/musik"
 	"errors"
 	"github.com/gofiber/fiber/v2"
-	cek "github.com/rayfanaqbil/zenverse-BE/module"
-	inimodel "github.com/rayfanaqbil/zenverse-BE/model"
+	cek "github.com/rayfanaqbil/zenverse-BE/v2/module"
+	inimodel "github.com/rayfanaqbil/zenverse-BE/v2/model"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -295,26 +295,3 @@ func GetGameByName(c *fiber.Ctx) error {
 
     return c.Status(fiber.StatusOK).JSON(games)
 }
-
-func Login(c *fiber.Ctx) error {
-	var loginDetails inimodel.Admin
-	if err := c.BodyParser(&loginDetails); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"status":  http.StatusBadRequest,
-			"message": "Invalid request",
-		})
-	}
-
-	_, err := cek.Login(config.Ulbimongoconn, "Admin", loginDetails.User_name, loginDetails.Password)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": err.Error(),
-		})
-	}
-
-	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"status":  http.StatusOK,
-		"message": "Login successful",
-	})
-}	
