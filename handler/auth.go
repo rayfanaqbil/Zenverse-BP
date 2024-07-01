@@ -43,19 +43,15 @@ func Login(c *fiber.Ctx) error {
 }
 
 func Logout(c *fiber.Ctx) error {
-    tokenStr := c.Get("Authorization")
-    if tokenStr == "" {
-        return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing token"})
-    }
-    tokenStr = tokenStr[len("Bearer "):]
+    username := c.Locals("username").(string)
 
     ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
     defer cancel()
     db := config.Ulbimongoconn
 
-    _, err := db.Collection("Admin").UpdateOne(ctx, bson.M{"token": tokenStr}, bson.M{"$unset": bson.M{"token": ""}})
+    _, err := db.Collection("Admin").UpdateOne(ctx, bson.M{"user_name": username}, bson.M{"$unset": bson.M{"token": ""}})
     if err != nil {
-        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
             "status":  fiber.StatusInternalServerError,
             "message": "Failed to logout",
         })
