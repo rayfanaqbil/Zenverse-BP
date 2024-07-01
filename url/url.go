@@ -27,9 +27,10 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Delete("/delete/:id", controller.DeleteGamesByID)
     page.Get("/docs/*", swagger.HandlerDefault)
     page.Post("/insert", controller.InsertDataGames)
-    page.Post("/login", handler.Login)
-    page.Get("/token", controller.GetDataToken)
-    page.Post("/logout", handler.Logout)
 
     page.Use(middleware.AuthMiddleware())
+    page.Get("/token", controller.GetDataToken)
+    page.Post("/logout", handler.Logout)
+    page.Post("/login", handler.Login)
+
 }
