@@ -254,3 +254,14 @@ func GetGameByName(c *fiber.Ctx) error {
 
     return c.Status(fiber.StatusOK).JSON(games)
 }
+
+func DashboardPage(c *fiber.Ctx) error {
+    username := c.Locals("username").(string)
+
+    data := map[string]interface{}{
+        "message": "Welcome to dashboard Admin",
+        "user":    username,
+    }
+
+    return c.Status(fiber.StatusOK).JSON(data)
+}
