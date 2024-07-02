@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"context"
 	"github.com/aiteung/musik"
 	"errors"
 	"github.com/gofiber/fiber/v2"
@@ -11,7 +10,6 @@ import (
 	"github.com/rayfanaqbil/Zenverse-BP/config"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 )
 
@@ -228,45 +226,6 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 		"status":  http.StatusOK,
 		"message": fmt.Sprintf("Data with id %s deleted successfully", id),
 	})
-}
-
-// GetDataAdmin godoc
-// @Summary Get Data Admin.
-// @Description Mengambil semua data admin.
-// @Tags Admin
-// @Accept json
-// @Produce json
-// @Success 200 {object} Games
-// @Router /admin [get]
-func GetDataToken(c *fiber.Ctx) error {
-    token := c.Get("Authorization")
-    if token == "" {
-        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-            "status":  fiber.StatusBadRequest,
-            "message": "Missing token",
-        })
-    }
-
-    token = token[len("Bearer "):]
-    var admin inimodel.Admin
-    err := config.Ulbimongoconn.Collection("Admin").FindOne(context.Background(), bson.M{"token": token}).Decode(&admin)
-    if err != nil {
-        if err == mongo.ErrNoDocuments {
-            return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-                "status":  fiber.StatusNotFound,
-                "message": "Token not found",
-            })
-        }
-        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-            "status":  fiber.StatusInternalServerError,
-            "message": "Failed to get admin token",
-        })
-    }
-
-    return c.Status(fiber.StatusOK).JSON(fiber.Map{
-        "status":  fiber.StatusOK,
-        "token":   admin.Token,
-    })
 }
 
 func GetGameByName(c *fiber.Ctx) error {

@@ -2,30 +2,28 @@ package middleware
 
 import (
     "github.com/gofiber/fiber/v2"
-    "github.com/dgrijalva/jwt-go"
-    inimodel "github.com/rayfanaqbil/zenverse-BE/model"
+    "github.com/golang-jwt/jwt/v4"
+    iniconfig "github.com/rayfanaqbil/zenverse-BE/v2/config"
 )
 
-var jwtKey = []byte("ZnVRsERfnHRsZ")
-
-func AuthMiddleware() fiber.Handler {
+func Protected() fiber.Handler {
     return func(c *fiber.Ctx) error {
-        tokenStr := c.Get("Authorization")
-        if tokenStr == "" {
-            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing token"})
+        tokenString := c.Get("Authorization")
+
+        if tokenString == "" {
+            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing or malformed JWT"})
         }
 
-        tokenStr = tokenStr[len("Bearer "):]
-
-        claims := &inimodel.Admin{}
-        token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
-            return jwtKey, nil
-        })
-        if err != nil || !token.Valid {
-            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token"})
+        token, err := iniconfig.ValidateJWT(tokenString)
+        if err != nil {
+            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or expired JWT"})
         }
 
-        c.Locals("user_name", claims.User_name)
-        return c.Next()
+        if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+            c.Locals("username", claims["username"])
+            return c.Next()
+        }
+
+        return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or expired JWT"})
     }
 }

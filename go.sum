@@ -23,8 +23,6 @@ github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSV
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
-github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/dnaeon/go-vcr v1.1.0/go.mod h1:M7tiix8f0r6mKKJ3Yq/kqU1OYf3MnfmBWVbPx/yU9ko=
 github.com/dnaeon/go-vcr v1.2.0/go.mod h1:R4UdLID7HZT3taECzJs4YgbbH6PIGXB6W/sc5OLb6RQ=
 github.com/fasthttp/websocket v1.5.9 h1:9deGuzYcCRKjk940kNwSN6Hd14hk4zYwropm4UsUIUQ=
@@ -102,10 +100,8 @@ github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8/go.mod h1:HKlIX3XHQyzL
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/rayfanaqbil/zenverse-BE v1.9.0 h1:YxY/TxM89o8ss86O1HIg+ioFUMpkoxxQvCh8EBBKlGM=
-github.com/rayfanaqbil/zenverse-BE v1.9.0/go.mod h1:xVlY6qlhWZweZ5bC4mC8ce6QEirIMtXRn6wxEWGtPNE=
-github.com/rayfanaqbil/zenverse-BE/v2 v2.6.0 h1:/1mTVhhpj05Fkpx5IorQGgQdo0XTwxEhHmagobHGaow=
-github.com/rayfanaqbil/zenverse-BE/v2 v2.6.0/go.mod h1:cBqgj0MP+4MObMfwvX19gUPe81YDS4wQOa3CfBVvxoo=
+github.com/rayfanaqbil/zenverse-BE/v2 v2.7.0 h1:Ys6NwQwczn4oK46G9B1kliwrnzoXlhPE+N3RADNjQxc=
+github.com/rayfanaqbil/zenverse-BE/v2 v2.7.0/go.mod h1:cBqgj0MP+4MObMfwvX19gUPe81YDS4wQOa3CfBVvxoo=
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
