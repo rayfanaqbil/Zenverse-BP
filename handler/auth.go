@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"net/http"
     "strings"
+    "fmt"
 )
 
 func Login(c *fiber.Ctx) error {
@@ -80,18 +81,21 @@ func Logout(c *fiber.Ctx) error {
 }
 
 func DashboardPage(c *fiber.Ctx) error {
-    adminID, ok := c.Locals("admin_id").(string)
-    if !ok {
+    adminID := c.Locals("admin_id")
+    if adminID == nil {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
             "status":  http.StatusInternalServerError,
             "message": "Admin ID not found in context",
         })
     }
 
+    adminIDStr := fmt.Sprintf("%v", adminID)
+
     return c.Status(http.StatusOK).JSON(fiber.Map{
         "status":  http.StatusOK,
-        "message": "Welcome to dashboard Admin",
-        "admin_id": adminID,
+        "message": "Dashboard access successful",
+        "admin_id": adminIDStr,
     })
 }
+
 
