@@ -81,20 +81,20 @@ func Logout(c *fiber.Ctx) error {
 }
 
 func DashboardPage(c *fiber.Ctx) error {
-    adminID := c.Locals("admin_id")
-    if adminID == nil {
+    User_name := c.Locals("user_name")
+    if User_name == nil {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
             "status":  http.StatusInternalServerError,
-            "message": "Admin ID not found in context",
+            "message": "Admin not found in context",
         })
     }
 
-    adminIDStr := fmt.Sprintf("%v", adminID)
+    adminname := fmt.Sprintf("%v", User_name)
 
     return c.Status(http.StatusOK).JSON(fiber.Map{
         "status":  http.StatusOK,
         "message": "Dashboard access successful",
-        "admin_id": adminIDStr,
+        "admin_id": adminname,
     })
 }
 
