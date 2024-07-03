@@ -29,7 +29,8 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Post("/insert", controller.InsertDataGames)
     page.Post("/login", handler.Login)     
 
-    page.Use(middleware.Protected())  
-    page.Get("/dashboard", controller.DashboardPage)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+    page.Use(middleware.AuthMiddleware())  
+    page.Get("/dashboard", handler.DashboardPage)  
+    page.Get("/dashboard", handler.Logout)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 
 }
