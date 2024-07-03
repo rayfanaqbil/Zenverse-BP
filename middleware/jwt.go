@@ -3,6 +3,7 @@ package middleware
 import (
     "github.com/gofiber/fiber/v2"
     "github.com/golang-jwt/jwt/v4"
+    iniconfig "github.com/rayfanaqbil/zenverse-BE/v2/config"
     "strings"
 )
 
@@ -11,45 +12,45 @@ func AuthMiddleware() fiber.Handler {
         authHeader := c.Get("Authorization")
         if authHeader == "" {
             return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-                "message": "Missing or malformed JWT",
+                "message": "Missing token",
             })
         }
+
         parts := strings.Split(authHeader, " ")
         if len(parts) != 2 || parts[0] != "Bearer" {
             return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-                "message": "Invalid JWT format",
+                "message": "Invalid token format",
             })
         }
 
-        tokenStr := parts[1]
-
-        token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+        tokenString := parts[1]
+        token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
             if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-                return nil, fiber.NewError(fiber.StatusUnauthorized, "Unexpected signing method")
+                return nil, fiber.NewError(fiber.StatusUnauthorized, "Invalid token")
             }
-            return []byte("ZeNvErSERynHrSZ"), nil
+            return []byte(iniconfig.JWTSecret), nil
         })
-        if err != nil {
+        if err != nil || !token.Valid {
             return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-                "message": "Invalid or expired JWT",
+                "message": "Invalid token",
             })
         }
 
-        // Validate token claims
-        if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-            if adminID, ok := claims["admin_id"].(string); ok {
-                c.Locals("admin_id", adminID)
-            } else {
-                return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-                    "message": "Invalid JWT claims",
-                })
-            }
-        } else {
+        claims, ok := token.Claims.(jwt.MapClaims)
+        if !ok || !token.Valid {
             return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-                "message": "Invalid JWT",
+                "message": "Invalid token claims",
             })
         }
 
+        adminID, ok := claims["admin_id"].(string)
+        if !ok {
+            return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+                "message": "Invalid token claims",
+            })
+        }
+
+        c.Locals("admin_id", adminID)
         return c.Next()
     }
 }
