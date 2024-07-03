@@ -80,12 +80,18 @@ func Logout(c *fiber.Ctx) error {
 }
 
 func DashboardPage(c *fiber.Ctx) error {
-    adminID := c.Locals("admin_id").(string)
-
-    data := map[string]interface{}{
-        "message": "Welcome to dashboard Admin",
-        "admin_id": adminID,
+    adminID, ok := c.Locals("admin_id").(string)
+    if !ok {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Admin ID not found in context",
+        })
     }
 
-    return c.Status(fiber.StatusOK).JSON(data)
+    return c.Status(http.StatusOK).JSON(fiber.Map{
+        "status":  http.StatusOK,
+        "message": "Welcome to dashboard Admin",
+        "admin_id": adminID,
+    })
 }
+
