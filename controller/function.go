@@ -240,7 +240,7 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 // @Failure 400
 // @Failure 404
 // @Failure 500
-// @Router /games/byname [get]
+// @Router /games/search [get]
 func GetGameByName(c *fiber.Ctx) error {
     name := c.Query("name")
     if name == "" {
