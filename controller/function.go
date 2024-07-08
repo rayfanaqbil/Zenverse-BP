@@ -264,9 +264,5 @@ func GetGameByName(c *fiber.Ctx) error {
         })
     }
 
-	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"status":  http.StatusOK,
-		"message": "Game data has been found",
-		"data" : games,
-})
+    return c.Status(fiber.StatusOK).JSON(games)
 }
