@@ -12,7 +12,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 )
-
 func Homepage(c *fiber.Ctx) error {
 	ipaddr := musik.GetIPaddress()
 	return c.JSON(ipaddr)

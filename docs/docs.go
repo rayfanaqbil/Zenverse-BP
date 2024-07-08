@@ -77,7 +77,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/games/byname": {
+        "/games/search": {
             "get": {
                 "description": "Mengambil data game berdasarkan nama.",
                 "consumes": [
