@@ -106,21 +106,6 @@ info:
   title: TES SWAGGER Data Games
   version: "1.0"
 paths:
-  /admin:
-    get:
-      consumes:
-      - application/json
-      description: Mengambil semua data admin.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/controller.Games'
-      summary: Get Data Admin.
-      tags:
-      - Admin
   /delete/{id}:
     delete:
       consumes:
@@ -184,6 +169,33 @@ paths:
         "500":
           description: Internal Server Error
       summary: Get By ID Data Games.
+      tags:
+      - Games
+  /games/byname:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil data game berdasarkan nama.
+      parameters:
+      - description: Nama game yang dicari
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Games'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get Game by Name.
       tags:
       - Games
   /insert:

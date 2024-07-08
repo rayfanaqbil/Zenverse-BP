@@ -228,6 +228,19 @@ func DeleteGamesByID(c *fiber.Ctx) error {
 	})
 }
 
+
+// GetGameByName godoc
+// @Summary Get Game by Name.
+// @Description Mengambil data game berdasarkan nama.
+// @Tags Games
+// @Accept json
+// @Produce json
+// @Param name query string true "Nama game yang dicari"
+// @Success 200 {object} Games
+// @Failure 400
+// @Failure 404
+// @Failure 500
+// @Router /games/byname [get]
 func GetGameByName(c *fiber.Ctx) error {
     name := c.Query("name")
     if name == "" {

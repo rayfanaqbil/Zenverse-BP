@@ -19,29 +19,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin": {
-            "get": {
-                "description": "Mengambil semua data admin.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "summary": "Get Data Admin.",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.Games"
-                        }
-                    }
-                }
-            }
-        },
         "/delete/{id}": {
             "delete": {
                 "description": "Hapus data games.",
@@ -96,6 +73,47 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/controller.Games"
                         }
+                    }
+                }
+            }
+        },
+        "/games/byname": {
+            "get": {
+                "description": "Mengambil data game berdasarkan nama.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Games"
+                ],
+                "summary": "Get Game by Name.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Nama game yang dicari",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Games"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
