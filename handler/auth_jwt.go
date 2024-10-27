@@ -28,7 +28,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	token, err := iniconfig.GenerateJWT(storedAdmin.ID.Hex())
+	token, err := iniconfig.GenerateJWT(storedAdmin)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,

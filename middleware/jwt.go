@@ -3,7 +3,7 @@ package middleware
 import (
     "github.com/gofiber/fiber/v2"
     "github.com/golang-jwt/jwt/v4"
-    iniconfig "github.com/rayfanaqbil/zenverse-BE/v2/config"
+    "os"
     "strings"
 )
 
@@ -28,7 +28,8 @@ func AuthMiddleware() fiber.Handler {
             if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
                 return nil, fiber.NewError(fiber.StatusUnauthorized, "Invalid token")
             }
-            return []byte(iniconfig.JWTSecret), nil
+            secretKey := os.Getenv("JWT_SECRET") 
+            return []byte(secretKey), nil
         })
         if err != nil || !token.Valid {
             return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
