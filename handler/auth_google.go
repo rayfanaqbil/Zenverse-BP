@@ -16,12 +16,12 @@ import (
 	"google.golang.org/api/option"
 )
 
-// GoogleLogin memulai alur autentikasi Google OAuth
 func GoogleLogin(c *fiber.Ctx) error {
 	url := inimodul.GoogleOAuthConfig.AuthCodeURL("state-token")
 	return c.Redirect(url)
 }
 
+// GoogleLogin memulai alur autentikasi Google OAuth
 func GoogleCallback(c *fiber.Ctx) error {
 	code := c.Query("code")
 	if code == "" {
