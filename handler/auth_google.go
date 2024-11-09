@@ -3,39 +3,55 @@ package handler
 import (
 	"context"
 	"net/http"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
 	iniconfig "github.com/rayfanaqbil/zenverse-BE/v2/config"
 	inimodel "github.com/rayfanaqbil/zenverse-BE/v2/model"
-	inimodul "github.com/rayfanaqbil/zenverse-BE/v2/module"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"google.golang.org/api/oauth2/v2"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+	oauth2api "google.golang.org/api/oauth2/v2"
 	"google.golang.org/api/option"
 )
 
+var (
+	GoogleOAuthConfig = &oauth2.Config{
+		RedirectURL:  "https://zenversegames-ba223a40f69e.herokuapp.com/auth/google/callback",
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		Scopes: []string{
+			"https://www.googleapis.com/auth/userinfo.profile",
+			"https://www.googleapis.com/auth/userinfo.email",
+		},
+		Endpoint: google.Endpoint,
+	}
+	allowedAdmins = []string{"rayfana09@gmail.com", "harissaefuloh@gmail.com"}
+)
+
 func GoogleLogin(c *fiber.Ctx) error {
-	url := inimodul.GoogleOAuthConfig.AuthCodeURL("state-token")
+	url := GoogleOAuthConfig.AuthCodeURL("state-token")
 	return c.Redirect(url)
 }
 
-// GoogleLogin memulai alur autentikasi Google OAuth
+// GoogleCallback menangani callback dari Google OAuth
 func GoogleCallback(c *fiber.Ctx) error {
 	code := c.Query("code")
 	if code == "" {
 		return c.Status(http.StatusBadRequest).SendString("Kode tidak ditemukan")
 	}
 
-	token, err := inimodul.GoogleOAuthConfig.Exchange(context.Background(), code)
+	token, err := GoogleOAuthConfig.Exchange(context.Background(), code)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).SendString("Gagal menukar token")
 	}
 
-	client := inimodul.GoogleOAuthConfig.Client(context.Background(), token)
+	client := GoogleOAuthConfig.Client(context.Background(), token)
 
-	oauth2Service, err := oauth2.NewService(context.Background(), option.WithHTTPClient(client))
+	oauth2Service, err := oauth2api.NewService(context.Background(), option.WithHTTPClient(client))
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).SendString("Gagal membuat layanan OAuth2")
 	}
@@ -45,7 +61,15 @@ func GoogleCallback(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).SendString("Gagal mengambil info pengguna")
 	}
 
-	if !inimodul.IsAdmin(config.Ulbimongoconn, "admin", userInfo.Email) {
+	// Cek apakah email pengguna termasuk dalam daftar admin yang diizinkan
+	isAllowed := false
+	for _, adminEmail := range allowedAdmins {
+		if userInfo.Email == adminEmail {
+			isAllowed = true
+			break
+		}
+	}
+	if !isAllowed {
 		return c.Status(fiber.StatusForbidden).SendString("Akses hanya untuk admin")
 	}
 
