@@ -8,7 +8,6 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/gofiber/swagger v1.0.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
-	github.com/joho/godotenv v1.5.1
 	github.com/rayfanaqbil/zenverse-BE/v2 v2.3.3
 	github.com/swaggo/swag v1.16.3
 	github.com/whatsauth/whatsauth v0.1.82
