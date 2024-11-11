@@ -30,7 +30,6 @@ import (
 func main() {
     db := config.Ulbimongoconn
     site := fiber.New(config.Iteung)
-    config.SetupCorsAndCOOP(site)
     site.Use(cors.New(config.Cors))
     site.Use(func(c *fiber.Ctx) error {
         c.Locals("db", db)
