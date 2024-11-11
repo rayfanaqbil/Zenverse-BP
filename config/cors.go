@@ -5,6 +5,7 @@ import (
     "strings"
 
     "github.com/gofiber/fiber/v2/middleware/cors"
+    "github.com/gofiber/fiber/v2"
 )
 
 var origins = []string{
@@ -28,4 +29,15 @@ var Cors = cors.Config{
     AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
     ExposeHeaders:    "Content-Length",
     AllowCredentials: true,
+}
+
+func SetupCorsAndCOOP(site *fiber.App) {
+    // Middleware CORS
+    site.Use(cors.New(Cors))
+
+    // Menambahkan header Cross-Origin-Opener-Policy
+    site.Use(func(c *fiber.Ctx) error {
+        c.Set("Cross-Origin-Opener-Policy", "same-origin")
+        return c.Next()
+    })
 }
