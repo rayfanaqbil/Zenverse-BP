@@ -26,9 +26,10 @@ type Developer struct {
 }
 
 type Admin struct {
-	ID   		primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-	User_name	string 		       `bson:"user_name,omitempty" json:"user_name,omitempty"`
-	Password 	string			   `bson:"password,omitempty" json:"password,omitempty"`
+	ID        primitive.ObjectID 	`bson:"_id,omitempty" json:"_id,omitempty"`
+    User_name string             	`bson:"user_name,omitempty" json:"user_name,omitempty"`
+	Email     string             	`bson:"email,omitempty" json:"email,omitempty"`
+    Password  string             	`bson:"password,omitempty" json:"password,omitempty"`
 }
 
 type Token struct{
