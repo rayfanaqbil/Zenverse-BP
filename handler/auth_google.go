@@ -73,6 +73,7 @@ func GoogleCallback(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusForbidden).SendString("Akses hanya untuk admin")
 	}
 
+	// Cek jika admin sudah ada di database
 	db := config.Ulbimongoconn
 	adminCollection := db.Collection("Admin")
 	var admin inimodel.Admin
@@ -96,7 +97,10 @@ func GoogleCallback(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).SendString("Gagal menghasilkan JWT")
 	}
 
-	// Mengembalikan token JWT
+	// Menyimpan admin_id dalam context
+	c.Locals("admin_id", admin.ID)
+
+	// Mengembalikan token JWT dalam query string untuk redirect ke dashboard
 	callbackURL := "https://hrisz.github.io/zenverse_FE/pages/admin/dashboard.html?token=" + jwtToken
-    return c.Redirect(callbackURL)
+	return c.Redirect(callbackURL)
 }
