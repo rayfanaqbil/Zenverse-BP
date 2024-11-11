@@ -21,6 +21,7 @@
         "https://rayfanaqbil.github.io",
         "http://127.0.0.1:5500",
         "https://hrisz.github.io",
+        "https://zenversegames-ba223a40f69e.herokuapp.com",
     }
 
     // Mendapatkan host internal dari environment variables
