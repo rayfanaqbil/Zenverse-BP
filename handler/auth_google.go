@@ -97,5 +97,6 @@ func GoogleCallback(c *fiber.Ctx) error {
 	}
 
 	// Mengembalikan token JWT
-	return c.JSON(fiber.Map{"token": jwtToken})
+	callbackURL := "https://hrisz.github.io/zenverse_FE/pages/admin/dashboard.html?token=" + jwtToken
+    return c.Redirect(callbackURL)
 }
