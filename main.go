@@ -31,7 +31,6 @@ func main() {
     db := config.Ulbimongoconn 
     site := fiber.New(config.Iteung)
     site.Use(cors.New(config.Cors))
-    config.SetupCorsAndCOOP(site)
     site.Use(func(c *fiber.Ctx) error {
         c.Locals("db", db)
         return c.Next()

@@ -10,14 +10,9 @@ import (
 	"github.com/gofiber/swagger"
 	"go.mongodb.org/mongo-driver/mongo"
     "github.com/rayfanaqbil/Zenverse-BP/middleware"
-    "github.com/gofiber/fiber/v2/middleware/cors"
-    "github.com/rayfanaqbil/Zenverse-BP/config"
 )
 
 func Web(page *fiber.App, db *mongo.Database) {
-
-    page.Use(cors.New(config.Cors))
-
     page.Get("/", controller.Sink)
     page.Post("/", controller.Sink)
     page.Put("/", controller.Sink)
@@ -36,9 +31,9 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Post("/logout", handler.Logout)   
     page.Get("/auth/google/login", handler.GoogleLogin)
     page.Get("/auth/google/callback", handler.GoogleCallback)
+     
 
     page.Use(middleware.AuthMiddleware())  
-    page.Get("/dashboard", handler.DashboardPage)         
-
+    page.Get("/dashboard", handler.DashboardPage)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 
 }

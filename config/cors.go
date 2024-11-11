@@ -4,10 +4,11 @@ import (
     "os"
     "strings"
 
-    "github.com/gofiber/fiber/v2/middleware/cors"
     "github.com/gofiber/fiber/v2"
+    "github.com/gofiber/fiber/v2/middleware/cors"
 )
 
+// Daftar origins yang diizinkan untuk CORS
 var origins = []string{
     "https://auth.ulbi.ac.id",
     "https://sip.ulbi.ac.id",
@@ -22,22 +23,26 @@ var origins = []string{
     "https://hrisz.github.io",
 }
 
+// Mendapatkan host internal dari environment variables
 var Internalhost string = os.Getenv("INTERNALHOST") + ":" + os.Getenv("PORT")
 
+// Konfigurasi CORS
 var Cors = cors.Config{
-    AllowOrigins:     strings.Join(origins[:], ","),
+    AllowOrigins:     strings.Join(origins, ","),
     AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
     ExposeHeaders:    "Content-Length",
     AllowCredentials: true,
 }
 
-func SetupCorsAndCOOP(site *fiber.App) {
-    // Middleware CORS
-    site.Use(cors.New(Cors))
+// Fungsi untuk setup CORS dan COOP di aplikasi Fiber
+func SetupCorsAndCOOP(app *fiber.App) {
+    // Middleware untuk CORS
+    app.Use(cors.New(Cors))
 
-    // Menambahkan header Cross-Origin-Opener-Policy
-    site.Use(func(c *fiber.Ctx) error {
+    // Middleware untuk menambahkan header Cross-Origin-Opener-Policy dan Cross-Origin-Embedder-Policy
+    app.Use(func(c *fiber.Ctx) error {
         c.Set("Cross-Origin-Opener-Policy", "same-origin")
+        c.Set("Cross-Origin-Embedder-Policy", "require-corp")
         return c.Next()
     })
 }
