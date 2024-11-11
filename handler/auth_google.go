@@ -74,7 +74,7 @@ func GoogleCallback(c *fiber.Ctx) error {
 	}
 
 	db := config.Ulbimongoconn
-	adminCollection := db.Collection("admin")
+	adminCollection := db.Collection("Admin")
 	var admin inimodel.Admin
 	err = adminCollection.FindOne(context.Background(), bson.M{"email": userInfo.Email}).Decode(&admin)
 	if err == mongo.ErrNoDocuments {
