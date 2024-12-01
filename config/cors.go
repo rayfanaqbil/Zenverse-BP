@@ -27,8 +27,8 @@ var Internalhost string = os.Getenv("INTERNALHOST") + ":" + os.Getenv("PORT")
 
 // Konfigurasi CORS
 var Cors = cors.Config{
-	AllowOrigins:     strings.Join(origins, ","),
-	AllowHeaders:     "Origin, Content-Type, Accept, Authorization, Cross-Origin-Opener-Policy, Cross-Origin-Embedder-Policy",
-	ExposeHeaders:    "Content-Length",
+	AllowOrigins:     strings.Join(origins, ","), // Domain yang diizinkan
+	AllowHeaders:     "Origin, Content-Type, Accept, Authorization", // Header yang diizinkan
+	ExposeHeaders:    "Content-Length",          // Header yang diekspos
 	AllowCredentials: true,
 }

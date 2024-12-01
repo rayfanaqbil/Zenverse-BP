@@ -8,7 +8,6 @@ import (
 	"github.com/aiteung/musik"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 
-
 	"github.com/rayfanaqbil/Zenverse-BP/url"
 
 	"github.com/gofiber/fiber/v2"
@@ -28,14 +27,17 @@ import (
 // @schemes https http
 
 func main() {
-    db := config.Ulbimongoconn
-    site := fiber.New(config.Iteung)
-    site.Use(cors.New(config.Cors))
-    site.Use(func(c *fiber.Ctx) error {
-        c.Locals("db", db)
-        return c.Next()
-    })
-    url.Web(site, db)
-    log.Fatal(site.Listen(musik.Dangdut()))
-   
+	db := config.Ulbimongoconn
+	site := fiber.New(config.Iteung)
+	site.Use(cors.New(config.Cors))
+
+	// Tambahkan middleware COOP dan COEP
+	site.Use(config.CoopCoepMiddleware())
+
+	site.Use(func(c *fiber.Ctx) error {
+		c.Locals("db", db)
+		return c.Next()
+	})
+	url.Web(site, db)
+	log.Fatal(site.Listen(musik.Dangdut()))
 }
