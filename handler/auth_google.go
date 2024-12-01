@@ -33,68 +33,83 @@ func GoogleLogin(c *fiber.Ctx) error {
 }
 
 func GoogleCallback(c *fiber.Ctx) error {
-	code := c.Query("code")
-	if code == "" {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"status":  http.StatusBadRequest,
-			"message": "Code not found",
-		})
-	}
+    if c.Query("error") != "" {
+        return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+            "status":  http.StatusBadRequest,
+            "message": c.Query("error"),
+        })
+    }
 
-	token, err := GoogleOAuthConfig.Exchange(c.Context(), code)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to exchange token",
-		})
-	}
+    code := c.Query("code")
+    if code == "" {
+        return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+            "status":  http.StatusBadRequest,
+            "message": "Authorization code not found",
+        })
+    }
 
-	client := GoogleOAuthConfig.Client(c.Context(), token) 
-	resp, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo")
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to get user info",
-		})
-	}
-	defer resp.Body.Close()
+    token, err := GoogleOAuthConfig.Exchange(c.Context(), code)
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Failed to exchange token: " + err.Error(),
+        })
+    }
 
-	var googleUser inimodel.GoogleUser
-	if err := json.NewDecoder(resp.Body).Decode(&googleUser); err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to decode user info",
-		})
-	}
+    client := GoogleOAuthConfig.Client(c.Context(), token)
+    resp, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo")
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Failed to get user info: " + err.Error(),
+        })
+    }
+    defer resp.Body.Close()
 
-	storedAdmin, err := inimodule.GetAdminByEmail(config.Ulbimongoconn, "Admin", googleUser.Email)
-	if err != nil {
-		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
-			"status":  http.StatusUnauthorized,
-			"message": "User not authorized as admin",
-		})
-	}
+    var googleUser inimodel.GoogleUser
+    if err := json.NewDecoder(resp.Body).Decode(&googleUser); err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Failed to decode user info: " + err.Error(),
+        })
+    }
 
+    if googleUser.Email == "" {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Google user email not found",
+        })
+    }
 
-	jwtToken, err := iniconfig.GenerateJWT(*storedAdmin)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to generate token",
-		})
-	}
+    admin, err := inimodule.GetAdminByEmail(config.Ulbimongoconn, "Admin", googleUser.Email)
+    if err != nil {
+        return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
+            "status":  http.StatusUnauthorized,
+            "message": "User not authorized as admin: " + err.Error(),
+        })
+    }
 
-	err = inimodule.SaveTokenToDatabase(config.Ulbimongoconn, "tokens", storedAdmin.ID.Hex(), jwtToken)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to save token",
-		})
-	}
+    jwtToken, err := iniconfig.GenerateJWT(*admin)
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Failed to generate token: " + err.Error(),
+        })
+    }
 
-	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"status":  http.StatusOK,
-		"message": "Login successful",
-		"token":   jwtToken,
-	})
+    err = inimodule.SaveTokenToDatabase(config.Ulbimongoconn, "tokens", admin.ID.Hex(), jwtToken)
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Failed to save token: " + err.Error(),
+        })
+    }
+
+    return c.Status(http.StatusOK).JSON(fiber.Map{
+        "status":   http.StatusOK,
+        "message":  "Login successful",
+        "token":    jwtToken,
+        "redirect": "https://hrisz.github.io/zenverse_FE/pages/admin/dashboard.html",
+    })
 }
+
