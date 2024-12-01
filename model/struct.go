@@ -60,3 +60,11 @@ type ReqAdmin struct {
 	User_name	string 		       `bson:"user_name,omitempty" json:"user_name,omitempty" example:"Timmy"`
 	Password 	string			   `bson:"password,omitempty" json:"password,omitempty" example:"timmy123"`
 }
+
+type GoogleUser struct {
+	ID            string `bson:"_id,omitempty" json:"_id,omitempty"`
+	Email         string `bson:"email,omitempty" json:"email,omitempty"`
+	VerifiedEmail bool   `bson:"verified_email" json:"verified_email"`
+	Picture       string `bson:"picture" json:"picture"`
+	Name          string `bson:"name" json:"name"`
+}

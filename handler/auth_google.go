@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"context"
+	"encoding/json"
 	"net/http"
 	"os"
 
@@ -9,13 +9,9 @@ import (
 	"github.com/rayfanaqbil/Zenverse-BP/config"
 	iniconfig "github.com/rayfanaqbil/zenverse-BE/v2/config"
 	inimodel "github.com/rayfanaqbil/zenverse-BE/v2/model"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	inimodule "github.com/rayfanaqbil/zenverse-BE/v2/module"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	oauth2api "google.golang.org/api/oauth2/v2"
-	"google.golang.org/api/option"
 )
 
 var (
@@ -29,78 +25,76 @@ var (
 		},
 		Endpoint: google.Endpoint,
 	}
-	allowedAdmins = []string{"rayfana09@gmail.com", "harissaefuloh@gmail.com"}
 )
 
 func GoogleLogin(c *fiber.Ctx) error {
-	url := GoogleOAuthConfig.AuthCodeURL("state-token")
+	url := GoogleOAuthConfig.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 	return c.Redirect(url)
 }
 
-// GoogleCallback menangani callback dari Google OAuth
 func GoogleCallback(c *fiber.Ctx) error {
 	code := c.Query("code")
 	if code == "" {
-		return c.Status(http.StatusBadRequest).SendString("Kode tidak ditemukan")
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Code not found",
+		})
 	}
 
-	token, err := GoogleOAuthConfig.Exchange(context.Background(), code)
+	token, err := GoogleOAuthConfig.Exchange(c.Context(), code)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).SendString("Gagal menukar token")
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Failed to exchange token",
+		})
 	}
 
-	client := GoogleOAuthConfig.Client(context.Background(), token)
-
-	oauth2Service, err := oauth2api.NewService(context.Background(), option.WithHTTPClient(client))
+	client := GoogleOAuthConfig.Client(c.Context(), token) 
+	resp, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo")
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).SendString("Gagal membuat layanan OAuth2")
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Failed to get user info",
+		})
+	}
+	defer resp.Body.Close()
+
+	var googleUser inimodel.GoogleUser
+	if err := json.NewDecoder(resp.Body).Decode(&googleUser); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Failed to decode user info",
+		})
 	}
 
-	userInfo, err := oauth2Service.Userinfo.Get().Do()
+	storedAdmin, err := inimodule.GetAdminByEmail(config.Ulbimongoconn, "Admin", googleUser.Email)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).SendString("Gagal mengambil info pengguna")
+		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
+			"status":  http.StatusUnauthorized,
+			"message": "User not authorized as admin",
+		})
 	}
 
-	// Cek apakah email pengguna termasuk dalam daftar admin yang diizinkan
-	isAllowed := false
-	for _, adminEmail := range allowedAdmins {
-		if userInfo.Email == adminEmail {
-			isAllowed = true
-			break
-		}
-	}
-	if !isAllowed {
-		return c.Status(fiber.StatusForbidden).SendString("Akses hanya untuk admin")
-	}
 
-	// Cek jika admin sudah ada di database
-	db := config.Ulbimongoconn
-	adminCollection := db.Collection("Admin")
-	var admin inimodel.Admin
-	err = adminCollection.FindOne(context.Background(), bson.M{"email": userInfo.Email}).Decode(&admin)
-	if err == mongo.ErrNoDocuments {
-		// Jika admin belum ada, buat data admin baru
-		admin.ID = primitive.NewObjectID()
-		admin.User_name = userInfo.Name
-		admin.Email = userInfo.Email
-		_, err = adminCollection.InsertOne(context.Background(), admin)
-		if err != nil {
-			return c.Status(http.StatusInternalServerError).SendString("Gagal menyimpan admin")
-		}
-	} else if err != nil {
-		return c.Status(http.StatusInternalServerError).SendString("Kesalahan database")
-	}
-
-	// Menghasilkan token JWT
-	jwtToken, err := iniconfig.GenerateJWT(admin)
+	jwtToken, err := iniconfig.GenerateJWT(*storedAdmin)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).SendString("Gagal menghasilkan JWT")
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Failed to generate token",
+		})
 	}
 
-	// Menyimpan admin_id dalam context
-	c.Locals("admin_id", admin.ID)
+	err = inimodule.SaveTokenToDatabase(config.Ulbimongoconn, "tokens", storedAdmin.ID.Hex(), jwtToken)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Failed to save token",
+		})
+	}
 
-	// Mengembalikan token JWT dalam query string untuk redirect ke dashboard
-	callbackURL := "https://hrisz.github.io/zenverse_FE/pages/admin/dashboard.html?token=" + jwtToken
-	return c.Redirect(callbackURL)
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Login successful",
+		"token":   jwtToken,
+	})
 }
