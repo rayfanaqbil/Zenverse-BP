@@ -10,7 +10,7 @@ import (
     "strings"
     "fmt"
 )
-
+//login
 func Login(c *fiber.Ctx) error {
 	var loginDetails model.Admin
 	if err := c.BodyParser(&loginDetails); err != nil {
