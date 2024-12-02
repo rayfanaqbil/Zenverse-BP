@@ -81,6 +81,15 @@ func GoogleCallback(c *fiber.Ctx) error {
         })
     }
 
+    err = inimodule.SaveGoogleUserToDatabase(config.Ulbimongoconn, "users", googleUser)
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Failed to save Google user data: " + err.Error(),
+        })
+    }
+
+
     admin, err := inimodule.GetAdminByEmail(config.Ulbimongoconn, "Admin", googleUser.Email)
     if err != nil {
         return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
@@ -112,4 +121,3 @@ func GoogleCallback(c *fiber.Ctx) error {
         "redirect": "https://hrisz.github.io/zenverse_FE/pages/admin/dashboard.html",
     })
 }
-
