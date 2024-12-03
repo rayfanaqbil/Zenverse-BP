@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-
+	"os"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
 
 	"github.com/aiteung/musik"
@@ -40,4 +40,6 @@ func main() {
 	})
 	url.Web(site, db)
 	log.Fatal(site.Listen(musik.Dangdut()))
+	log.Println("GOOGLE_CLIENT_ID:", os.Getenv("GOOGLE_CLIENT_ID")) // Hanya untuk debug, jangan gunakan di production!
+	log.Println("GOOGLE_CLIENT_SECRET:", os.Getenv("GOOGLE_CLIENT_SECRET"))
 }
