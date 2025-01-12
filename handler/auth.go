@@ -11,6 +11,8 @@ import (
     "fmt"
 	"golang.org/x/oauth2"
 	"encoding/json"
+	"errors"
+	"regexp"
 )
 
 func Login(c *fiber.Ctx) error {
@@ -22,6 +24,12 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
+	if err := validateLoginInput(loginDetails.User_name, loginDetails.Password); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": err.Error(),
+		})
+	}
 
 	storedAdmin, err := module.GetAdminByUsername(config.Ulbimongoconn, "Admin", loginDetails.User_name)
 	if err != nil {
@@ -225,8 +233,6 @@ func GoogleCallback(c *fiber.Ctx) error {
 	})
 }
 
-
-
 func DashboardPage(c *fiber.Ctx) error {
     adminID := c.Locals("admin_id")
     if adminID == nil {
@@ -243,4 +249,17 @@ func DashboardPage(c *fiber.Ctx) error {
         "message": "Dashboard access successful",
         "admin_id": adminIDStr,
     })
+}	
+
+func validateLoginInput(username, password string) error {
+    re := regexp.MustCompile("^[a-zA-Z0-9_]+$")
+    if !re.MatchString(username) {
+        return errors.New("invalid username format")
+    }
+
+    if len(password) < 8 {
+        return errors.New("password must be at least 8 characters")
+    }
+    
+    return nil
 }
