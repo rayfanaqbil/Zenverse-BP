@@ -12,7 +12,7 @@ import (
 	"golang.org/x/oauth2"
 	"encoding/json"
 )
-//login
+
 func Login(c *fiber.Ctx) error {
 	var loginDetails model.Admin
 	if err := c.BodyParser(&loginDetails); err != nil {
@@ -86,6 +86,13 @@ func Logout(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Could not delete token",
+		})
+	}
+
+	err = module.AddToBlacklist(config.Ulbimongoconn, "blacklist", token)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to blacklist token",
 		})
 	}
 
@@ -237,5 +244,3 @@ func DashboardPage(c *fiber.Ctx) error {
         "admin_id": adminIDStr,
     })
 }
-
-
