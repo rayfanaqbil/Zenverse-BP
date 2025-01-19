@@ -42,37 +42,42 @@ func GetAllGames(c *fiber.Ctx) error {
 // @Failure 404
 // @Failure 500
 // @Router /games/{id} [get]
-func GetGamesByID(c *fiber.Ctx) error {
-	id := c.Params("id")
-	if id == "" {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Wrong parameter",
-		})
-	}
-	objID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"status":  http.StatusBadRequest,
-			"message": "Invalid id parameter",
-		})
-	}
-	ps, err := cek.GetGamesByID(objID, config.Ulbimongoconn, "Games")
-	if err != nil {
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return c.Status(http.StatusNotFound).JSON(fiber.Map{
-				"status":  http.StatusNotFound,
-				"message": fmt.Sprintf("No data found for id %s", id),
-			})
-		}
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": fmt.Sprintf("Error retrieving data for id %s", id),
-		})
-	}
-	return c.JSON(ps)
-}
+func GetGameDetails(c *fiber.Ctx) error {
+    var request struct {
+        ID string `json:"id"`
+    }
 
+    if err := c.BodyParser(&request); err != nil {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "status":  fiber.StatusBadRequest,
+            "message": "Invalid request body",
+        })
+    }
+
+    objID, err := primitive.ObjectIDFromHex(request.ID)
+    if err != nil {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "status":  fiber.StatusBadRequest,
+            "message": "Invalid game ID",
+        })
+    }
+
+    game, err := cek.GetGamesByID(objID, config.Ulbimongoconn, "Games")
+    if err != nil {
+        if errors.Is(err, mongo.ErrNoDocuments) {
+            return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+                "status":  fiber.StatusNotFound,
+                "message": "Game not found",
+            })
+        }
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "status":  fiber.StatusInternalServerError,
+            "message": "Failed to retrieve game details",
+        })
+    }
+
+    return c.JSON(game)
+}
 // InsertDataGames godoc
 // @Summary Insert data Games.
 // @Description Input data games.
