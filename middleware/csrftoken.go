@@ -14,3 +14,12 @@ func VerifyCSRFToken(c *fiber.Ctx) error {
     }
     return nil
 }
+
+func CSRFProtection() fiber.Handler {
+    return func(c *fiber.Ctx) error {
+        if err := VerifyCSRFToken(c); err != nil {
+            return err
+        }
+        return c.Next()
+    }
+}
