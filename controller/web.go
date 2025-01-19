@@ -9,6 +9,7 @@ type HTTPRequest struct {
 	Body   string `json:"body"`
 }
 
+//sink
 func Sink(c *fiber.Ctx) error {
 	var req HTTPRequest
 	req.Header = string(c.Request().Header.Header())
