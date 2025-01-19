@@ -26,7 +26,6 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Put("/update/:id", controller.UpdateDataGames)
     page.Delete("/delete/:id", controller.DeleteGamesByID)
     page.Get("/docs/*", swagger.HandlerDefault)
-    page.Post("/insert", controller.InsertDataGames)
     page.Post("/login", handler.Login) 
     page.Post("/logout", handler.Logout)   
     page.Get("/auth/google", handler.GoogleLogin)
@@ -34,6 +33,7 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Post("/registeradmin", handler.Register)
      
     page.Use(middleware.AuthMiddleware())  
-    page.Get("/dashboard", handler.DashboardPage)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+    page.Get("/dashboard", handler.DashboardPage)     
+    page.Post("/insert-data-games", middleware.RateLimiter(), controller.InsertDataGames)
 
 }
