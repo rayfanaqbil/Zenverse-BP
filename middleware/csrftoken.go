@@ -46,11 +46,12 @@ func GenerateCSRFToken(c *fiber.Ctx) error {
 }
 
 func generateRandomString(length int) string {
-    rand.Seed(time.Now().UnixNano())
+    randomSource := rand.New(rand.NewSource(time.Now().UnixNano()))
     charset := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     var token []byte
     for i := 0; i < length; i++ {
-        token = append(token, charset[rand.Intn(len(charset))])
+        token = append(token, charset[randomSource.Intn(len(charset))])
     }
     return string(token)
+
 }
