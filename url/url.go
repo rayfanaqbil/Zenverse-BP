@@ -31,9 +31,9 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Get("/auth/google", handler.GoogleLogin)
     page.Get("/auth/google/callback", handler.GoogleCallback)
     page.Post("/registeradmin", handler.Register)
+    page.Post("/insert-data-games", middleware.RateLimiter(), controller.InsertDataGames)
      
     page.Use(middleware.AuthMiddleware())  
     page.Get("/dashboard", handler.DashboardPage)     
-    page.Post("/insert-data-games", middleware.RateLimiter(), controller.InsertDataGames)
 
 }
