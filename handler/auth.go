@@ -9,8 +9,6 @@ import (
 	"net/http"
     "strings"
     "fmt"
-	"golang.org/x/oauth2"
-	"encoding/json"
 	"errors"
 	"regexp"
 )
@@ -155,81 +153,6 @@ func Register(c *fiber.Ctx) error {
 		"status":  http.StatusCreated,
 		"message": "Account registered successfully",
 		"data":    insertedID,
-	})
-}
-
-func GoogleLogin(c *fiber.Ctx) error {
-	url := config.GoogleOAuthConfig.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
-	return c.Redirect(url)
-}
-
-func GoogleCallback(c *fiber.Ctx) error {
-	code := c.Query("code")
-	if code == "" {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"status":  http.StatusBadRequest,
-			"message": "Authorization code not provided",
-		})
-	}
-
-	token, err := config.GoogleOAuthConfig.Exchange(c.Context(), code)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to exchange token",
-		})
-	}
-
-	client := config.GoogleOAuthConfig.Client(c.Context(), token)
-	resp, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to get user info",
-		})
-	}
-	defer resp.Body.Close()
-
-	var userInfo map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&userInfo); err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to parse user info",
-		})
-	}
-
-	// Simpan atau autentikasi user berdasarkan email Google
-	email := userInfo["email"].(string)
-	existingAdmin, _ := module.GetAdminByEmail(config.Ulbimongoconn, "Admin", email)
-	if existingAdmin == nil {
-		// Daftar admin baru jika belum ada
-		insertedID, err := module.InsertAdmin(config.Ulbimongoconn, "Admin", email, "", email)
-		if err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-				"status":  http.StatusInternalServerError,
-				"message": "Failed to create new user",
-			})
-		}
-		return c.Status(http.StatusOK).JSON(fiber.Map{
-			"status": http.StatusOK,
-			"message": "Account registered successfully",
-			"data": insertedID,
-		})
-	}
-
-	// Buat token JWT
-	tokenString, err := iniconfig.GenerateJWT(*existingAdmin)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to generate token",
-		})
-	}
-
-	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"status":  http.StatusOK,
-		"message": "Login successful",
-		"token":   tokenString,
 	})
 }
 

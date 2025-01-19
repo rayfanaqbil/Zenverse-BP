@@ -5,8 +5,6 @@ import (
     "os"
     "github.com/rayfanaqbil/Zenverse-BP/config"
     "strings"
-    "time"
-    "github.com/gofiber/fiber/v2/middleware/limiter"
     "github.com/rayfanaqbil/zenverse-BE/v2/module"
     "github.com/gofiber/fiber/v2"
     "github.com/golang-jwt/jwt/v4"
@@ -87,14 +85,4 @@ func AuthMiddleware() fiber.Handler {
 
         return c.Next()
     }
-}
-
-func RateLimiter() fiber.Handler {
-	return limiter.New(limiter.Config{
-		Max:        10,                
-		Expiration: 3 * time.Minute,  
-		KeyGenerator: func(c *fiber.Ctx) string {
-			return c.IP() 
-		},
-	})
 }
