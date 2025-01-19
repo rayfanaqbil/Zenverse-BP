@@ -1,16 +1,18 @@
 package handler
 
 import (
-	"github.com/rayfanaqbil/zenverse-BE/v2/module"
-	"github.com/rayfanaqbil/zenverse-BE/v2/model"
+	"errors"
+	"fmt"
+	"net/http"
+	"regexp"
+	"strings"
+	"math/rand"
+	"time"
+	"github.com/gofiber/fiber/v2"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
 	iniconfig "github.com/rayfanaqbil/zenverse-BE/v2/config"
-	"github.com/gofiber/fiber/v2"
-	"net/http"
-    "strings"
-    "fmt"
-	"errors"
-	"regexp"
+	"github.com/rayfanaqbil/zenverse-BE/v2/model"
+	"github.com/rayfanaqbil/zenverse-BE/v2/module"
 )
 
 func Login(c *fiber.Ctx) error {
@@ -63,11 +65,14 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
+	csrfToken := generateRandomString(32)
+    SetCSRFTokenCookie(c, csrfToken)
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status":  http.StatusOK,
 		"message": "Login successful",
 		"token":   token,
+		"csrf_token": csrfToken,
 	})
 }
 
@@ -185,4 +190,34 @@ func validateLoginInput(username, password string) error {
     }
     
     return nil
+}
+
+func SetCSRFTokenCookie(c *fiber.Ctx, csrfToken string) {
+    c.Cookie(&fiber.Cookie{
+        Name:     "csrf_token",
+        Value:    csrfToken,
+        SameSite: "Strict", 
+        Secure:   true,      
+        HTTPOnly: true,      
+    })
+}
+
+func GenerateCSRFToken(c *fiber.Ctx) error {
+    csrfToken := generateRandomString(32)
+    SetCSRFTokenCookie(c, csrfToken)
+    return c.JSON(fiber.Map{
+        "message": "CSRF token set successfully",
+        "csrf_token": csrfToken,
+    })
+}
+
+func generateRandomString(length int) string {
+    randomSource := rand.New(rand.NewSource(time.Now().UnixNano()))
+    charset := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    var token []byte
+    for i := 0; i < length; i++ {
+        token = append(token, charset[randomSource.Intn(len(charset))])
+    }
+    return string(token)
+
 }

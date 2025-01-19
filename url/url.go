@@ -30,6 +30,8 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Post("/logout", handler.Logout)   
     page.Post("/registeradmin", handler.Register)
     page.Post("/insert-data-games", middleware.RateLimiter(), controller.InsertDataGames)
+    page.Get("/csrf-token", handler.GenerateCSRFToken)
+
      
     page.Use(middleware.AuthMiddleware(), middleware.CSRFProtection())  
     page.Get("/dashboard", handler.DashboardPage)     
