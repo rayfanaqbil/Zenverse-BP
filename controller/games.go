@@ -1,16 +1,18 @@
 package controller
 
 import (
-	"fmt"
-	"github.com/aiteung/musik"
 	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/aiteung/musik"
 	"github.com/gofiber/fiber/v2"
-	cek "github.com/rayfanaqbil/zenverse-BE/v2/module"
-	inimodel "github.com/rayfanaqbil/zenverse-BE/v2/model"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
+	"github.com/rayfanaqbil/Zenverse-BP/middleware"
+	inimodel "github.com/rayfanaqbil/zenverse-BE/v2/model"
+	cek "github.com/rayfanaqbil/zenverse-BE/v2/module"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"net/http"
 )
 func Homepage(c *fiber.Ctx) error {
 	ipaddr := musik.GetIPaddress()
@@ -85,6 +87,9 @@ func GetGamesByID(c *fiber.Ctx) error {
 // @Failure 500
 // @Router /insert [post]
 func InsertDataGames(c *fiber.Ctx) error {
+	if err := middleware.VerifyCSRFToken(c); err != nil {
+		return err
+	}
 	db := config.Ulbimongoconn
 	var games inimodel.Games
 	if err := c.BodyParser(&games); err != nil {
