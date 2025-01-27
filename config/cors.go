@@ -9,16 +9,10 @@ import (
 
 // Daftar origins yang diizinkan untuk CORS
 var origins = []string{
-	"https://auth.ulbi.ac.id",
-	"https://sip.ulbi.ac.id",
-	"https://euis.ulbi.ac.id",
-	"https://home.ulbi.ac.id",
-	"https://alpha.ulbi.ac.id",
-	"https://dias.ulbi.ac.id",
-	"https://iteung.ulbi.ac.id",
-	"https://whatsauth.github.io",
-	"https://rayfanaqbil.github.io",
 	"http://127.0.0.1:5500",
+	"http://127.0.0.1:5501",
+	"http://127.0.0.1:8080",
+	"https://rayfanaqbil.github.io",
 	"https://hrisz.github.io",
 }
 
