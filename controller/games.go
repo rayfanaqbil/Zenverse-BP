@@ -29,10 +29,7 @@ func Homepage(c *fiber.Ctx) error {
 // @Router /games [get]
 func GetAllGames(c *fiber.Ctx) error { 
 	ps := cek.GetAllDataGames(config.Ulbimongoconn, "Games")
-	return c.JSON(fiber.Map{
-		"status": http.StatusOK,
-		"data":   ps,
-	})
+	return c.JSON(ps)
 }
 
 // GetGamesByID godoc
