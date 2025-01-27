@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-
+	"strconv"
 	"github.com/aiteung/musik"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
@@ -270,4 +270,46 @@ func GetGameByName(c *fiber.Ctx) error {
     }
 
     return c.Status(fiber.StatusOK).JSON(games)
+}
+
+func GetGamesByRating(c *fiber.Ctx) error {
+    ratingStr := c.Query("rating")
+    if ratingStr == "" {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "status":  fiber.StatusBadRequest,
+            "message": "Query parameter 'rating' is required",
+        })
+    }
+
+    rating, err := strconv.ParseFloat(ratingStr, 64)
+    if err != nil {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "status":  fiber.StatusBadRequest,
+            "message": "Invalid 'rating' parameter",
+        })
+    }
+
+    games, err := cek.GetGamesByHighestRating(config.Ulbimongoconn, "Games")
+    if err != nil {
+        if errors.Is(err, mongo.ErrNoDocuments) {
+            return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+                "status":  fiber.StatusNotFound,
+                "message": fmt.Sprintf("No games found with rating %.2f", rating),
+            })
+        }
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "status":  fiber.StatusInternalServerError,
+            "message": fmt.Sprintf("Error retrieving games by rating: %v", err),
+        })
+    }
+
+
+    var filteredGames []inimodel.Games
+    for _, game := range games {
+        if game.Rating >= rating {
+            filteredGames = append(filteredGames, game)
+        }
+    }
+
+    return c.Status(fiber.StatusOK).JSON(filteredGames)
 }
