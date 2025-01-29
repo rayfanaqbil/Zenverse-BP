@@ -61,7 +61,7 @@ func GetGamesByID(c *fiber.Ctx) error {
 		})
 	}
 
-	
+
 	objID, err := primitive.ObjectIDFromHex(decryptedID)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
@@ -93,15 +93,10 @@ func GetGamesByID(c *fiber.Ctx) error {
 		})
 	}
 
-
+	
 	return c.JSON(fiber.Map{
-		"status":  http.StatusOK,
-		"message": "Success",
-		"data": fiber.Map{
-			"id":    encryptedID, 
-			"name":  ps.Name,    
-			"genre": ps.Genre,    
-		},
+		"game":       ps,
+		"encryptedID": encryptedID,
 	})
 }
 
