@@ -47,18 +47,29 @@ func GetAllGames(c *fiber.Ctx) error {
 func GetGamesByID(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  http.StatusInternalServerError,
-			"message": "Wrong parameter",
-		})
-	}
-	objID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  http.StatusBadRequest,
 			"message": "Invalid id parameter",
 		})
 	}
+
+	decryptedID, err := config.DecryptID(id)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid encrypted ID",
+		})
+	}
+
+	
+	objID, err := primitive.ObjectIDFromHex(decryptedID)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid ID format",
+		})
+	}
+
 	ps, err := cek.GetGamesByID(objID, config.Ulbimongoconn, "Games")
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
@@ -72,8 +83,29 @@ func GetGamesByID(c *fiber.Ctx) error {
 			"message": fmt.Sprintf("Error retrieving data for id %s", id),
 		})
 	}
-	return c.JSON(ps)
+
+
+	encryptedID, err := config.EncryptID(ps.ID.Hex())
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": "Error encrypting ID",
+		})
+	}
+
+
+	return c.JSON(fiber.Map{
+		"status":  http.StatusOK,
+		"message": "Success",
+		"data": fiber.Map{
+			"id":    encryptedID, 
+			"name":  ps.Name,    
+			"genre": ps.Genre,    
+		},
+	})
 }
+
+
 
 // InsertDataGames godoc
 // @Summary Insert data Games.
