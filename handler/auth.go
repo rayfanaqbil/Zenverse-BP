@@ -206,6 +206,7 @@ func UpdatePasswordAdmin(c *fiber.Ctx) error {
         })
     }
 
+
     adminID := c.Locals("admin_id")
     if adminID == nil {
         return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -218,6 +219,7 @@ func UpdatePasswordAdmin(c *fiber.Ctx) error {
         OldPassword string `json:"old_password"`
         NewPassword string `json:"new_password"`
     }
+
 
     if err := c.BodyParser(&passwordDetails); err != nil {
         return c.Status(http.StatusBadRequest).JSON(fiber.Map{
@@ -241,7 +243,6 @@ func UpdatePasswordAdmin(c *fiber.Ctx) error {
         })
     }
 
-
     hashedPassword, err := iniconfig.HashPassword(passwordDetails.NewPassword)
     if err != nil {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
@@ -263,6 +264,7 @@ func UpdatePasswordAdmin(c *fiber.Ctx) error {
         "message": "Password updated successfully",
     })
 }
+
 
 func SetCSRFTokenCookie(c *fiber.Ctx, csrfToken string) {
     c.Cookie(&fiber.Cookie{
