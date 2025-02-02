@@ -3,13 +3,14 @@ package handler
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"regexp"
 	"strings"
-	"math/rand"
 	"time"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
+	"github.com/rayfanaqbil/Zenverse-BP/helper"
 	iniconfig "github.com/rayfanaqbil/zenverse-BE/v2/config"
 	"github.com/rayfanaqbil/zenverse-BE/v2/model"
 	"github.com/rayfanaqbil/zenverse-BE/v2/module"
@@ -70,9 +71,6 @@ func Login(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status":     http.StatusOK,
 		"message":    "Login successful",
-		"id":         storedAdmin.ID.Hex(),     
-		"user_name":  storedAdmin.User_name,      
-		"name":       storedAdmin.Name,
 		"token":      token,                      
 		"csrf_token": csrfToken,                  
 	})
@@ -174,12 +172,25 @@ func DashboardPage(c *fiber.Ctx) error {
 
     adminIDStr := fmt.Sprintf("%v", adminID)
 
+    
+    storedAdmin, err := helper.GetAdminByID(config.Ulbimongoconn, "Admin", adminIDStr)
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Could not retrieve admin details",
+        })
+    }
+
+    
     return c.Status(http.StatusOK).JSON(fiber.Map{
-        "status":  http.StatusOK,
-        "message": "Dashboard access successful",
-        "admin_id": adminIDStr,
+        "status":    http.StatusOK,
+        "message":   "Dashboard access successful",
+        "admin_id":  storedAdmin.ID.Hex(),
+        "user_name": storedAdmin.User_name,
+        "name":      storedAdmin.Name,
     })
-}	
+}
+	
 
 func validateLoginInput(username, password string) error {
     re := regexp.MustCompile("^[a-zA-Z0-9_]+$")
