@@ -13,6 +13,12 @@ import (
 
 func AuthMiddleware() fiber.Handler {
     return func(c *fiber.Ctx) error {
+        err := module.CreateTTLIndex(config.Ulbimongoconn, "blacklist")
+        if err != nil {
+            return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+                "message": "Failed to create TTL index",
+            })
+        }
         authHeader := c.Get("Authorization")
         if authHeader == "" {
             return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{

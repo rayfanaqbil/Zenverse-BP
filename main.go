@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
-
+	modul "github.com/rayfanaqbil/zenverse-BE/v2/module"
 	"github.com/aiteung/musik"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 
@@ -30,6 +30,12 @@ func main() {
 	db := config.Ulbimongoconn
 	site := fiber.New(config.Iteung)
 	site.Use(cors.New(config.Cors))
+
+	err := modul.CreateTTLIndex(config.Ulbimongoconn, "blacklist")
+    if err != nil {
+        log.Fatalf("Failed to create TTL index: %v", err)
+    }
+
 
 	// Tambahkan middleware COOP dan COEP
 	site.Use(config.CoopCoepMiddleware())
