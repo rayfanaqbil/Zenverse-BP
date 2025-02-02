@@ -1,11 +1,9 @@
 package handler
 
 import (
-	"errors"
 	"fmt"
 	"math/rand"
 	"net/http"
-	"regexp"
 	"strings"
 	"time"
 	"github.com/gofiber/fiber/v2"
@@ -25,7 +23,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := validateLoginInput(loginDetails.User_name, loginDetails.Password); err != nil {
+	if err := helper.ValidateLoginInput(loginDetails.User_name, loginDetails.Password); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  http.StatusBadRequest,
 			"message": err.Error(),
@@ -190,19 +188,80 @@ func DashboardPage(c *fiber.Ctx) error {
         "name":      storedAdmin.Name,
     })
 }
-	
 
-func validateLoginInput(username, password string) error {
-    re := regexp.MustCompile("^[a-zA-Z0-9_]+$")
-    if !re.MatchString(username) {
-        return errors.New("invalid username format")
+func UpdatePasswordAdmin(c *fiber.Ctx) error {
+    csrfToken := c.Get("X-CSRF-Token")
+    if csrfToken == "" {
+        return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+            "status":  fiber.StatusForbidden,
+            "message": "CSRF token missing",
+        })
     }
 
-    if len(password) < 8 {
-        return errors.New("password must be at least 8 characters")
+    sessionCSRFToken := c.Cookies("csrf_token")
+    if csrfToken != sessionCSRFToken {
+        return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+            "status":  fiber.StatusForbidden,
+            "message": "Invalid CSRF token",
+        })
     }
-    
-    return nil
+
+    adminID := c.Locals("admin_id")
+    if adminID == nil {
+        return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+            "status":  fiber.StatusUnauthorized,
+            "message": "Unauthorized",
+        })
+    }
+
+    var passwordDetails struct {
+        OldPassword string `json:"old_password"`
+        NewPassword string `json:"new_password"`
+    }
+
+    if err := c.BodyParser(&passwordDetails); err != nil {
+        return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+            "status":  http.StatusBadRequest,
+            "message": "Invalid request body",
+        })
+    }
+
+    storedAdmin, err := helper.GetAdminByID(config.Ulbimongoconn, "Admin", fmt.Sprintf("%v", adminID))
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Could not retrieve admin details",
+        })
+    }
+
+    if !iniconfig.CheckPasswordHash(passwordDetails.OldPassword, storedAdmin.Password) {
+        return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
+            "status":  http.StatusUnauthorized,
+            "message": "Old password is incorrect",
+        })
+    }
+
+
+    hashedPassword, err := iniconfig.HashPassword(passwordDetails.NewPassword)
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Could not hash new password",
+        })
+    }
+
+    err = helper.UpdateAdminPassword(config.Ulbimongoconn, "Admin", fmt.Sprintf("%v", adminID), hashedPassword)
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Could not update password",
+        })
+    }
+
+    return c.Status(fiber.StatusOK).JSON(fiber.Map{
+        "status":  http.StatusOK,
+        "message": "Password updated successfully",
+    })
 }
 
 func SetCSRFTokenCookie(c *fiber.Ctx, csrfToken string) {

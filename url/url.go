@@ -1,5 +1,3 @@
-// url.go
-
 package url
 
 import (
@@ -31,14 +29,18 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Post("/logout", handler.Logout)   
     page.Post("/registeradmin", handler.Register)
     page.Get("/csrf-token", handler.GenerateCSRFToken)
+    
+    page.Put("/update-password", 
+        middleware.AuthMiddleware(),
+        middleware.CSRFProtection(),
+        handler.UpdatePasswordAdmin) 
+
     page.Post("/insert-game",
 		middleware.RateLimiter(),
 		middleware.CSRFProtection(),
 		controller.InsertDataGames,
 	)
 
-     
     page.Use(middleware.AuthMiddleware(), middleware.CSRFProtection())  
     page.Get("/dashboard", handler.DashboardPage)     
-
 }
