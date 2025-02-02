@@ -36,6 +36,7 @@ func Web(page *fiber.App, db *mongo.Database) {
         handler.UpdatePasswordAdmin) 
 
     page.Post("/insert-game",
+        middleware.SecurityHeaders(),
 		middleware.RateLimiter(),
 		middleware.CSRFProtection(),
 		controller.InsertDataGames,
