@@ -68,10 +68,13 @@ func Login(c *fiber.Ctx) error {
     SetCSRFTokenCookie(c, csrfToken)
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"status":  http.StatusOK,
-		"message": "Login successful",
-		"token":   token,
-		"csrf_token": csrfToken,
+		"status":     http.StatusOK,
+		"message":    "Login successful",
+		"id":         storedAdmin.ID.Hex(),     
+		"user_name":  storedAdmin.User_name,      
+		"name":       storedAdmin.Name,
+		"token":      token,                      
+		"csrf_token": csrfToken,                  
 	})
 }
 
