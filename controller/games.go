@@ -45,15 +45,6 @@ func GetAllGames(c *fiber.Ctx) error {
 // @Failure 500
 // @Router /games/{id} [get]
 func GetGamesByID(c *fiber.Ctx) error {
-    key, err := config.GetEncryptionKey()
-    if err != nil {
-        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-            "status":  http.StatusInternalServerError,
-            "message": err.Error(),
-        })
-    }
-
-   
     id := c.Params("id")
     if id == "" {
         return c.Status(http.StatusBadRequest).JSON(fiber.Map{
@@ -62,17 +53,7 @@ func GetGamesByID(c *fiber.Ctx) error {
         })
     }
 
-   
-    encryptedID, err := config.EncryptID(key, id)
-    if err != nil {
-        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-            "status":  http.StatusInternalServerError,
-            "message": "Failed to encrypt ID",
-        })
-    }
-
-
-    objID, err := primitive.ObjectIDFromHex(encryptedID)
+    objID, err := primitive.ObjectIDFromHex(id)
     if err != nil {
         return c.Status(http.StatusBadRequest).JSON(fiber.Map{
             "status":  http.StatusBadRequest,
@@ -80,7 +61,6 @@ func GetGamesByID(c *fiber.Ctx) error {
         })
     }
 
-    // Ambil data game berdasarkan ID dari database
     game, err := cek.GetGamesByID(objID, config.Ulbimongoconn, "Games")
     if err != nil {
         return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
@@ -89,39 +69,11 @@ func GetGamesByID(c *fiber.Ctx) error {
         })
     }
 
+
     return c.Status(http.StatusOK).JSON(game)
 }
 
-func EncryptIDHandler(c *fiber.Ctx) error {
-    key, err := config.GetEncryptionKey()
-    if err != nil {
-        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-            "status":  http.StatusInternalServerError,
-            "message": err.Error(),
-        })
-    }
 
-    id := c.Query("id")
-    if id == "" {
-        return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-            "status":  http.StatusBadRequest,
-            "message": "Missing ID parameter",
-        })
-    }
-
-    // Enkripsi ID
-    encryptedID, err := config.EncryptID(key, id)
-    if err != nil {
-        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-            "status":  http.StatusInternalServerError,
-            "message": "Failed to encrypt ID",
-        })
-    }
-
-    return c.JSON(fiber.Map{
-        "encrypted_id": encryptedID,
-    })
-}
 
 
 // InsertDataGames godoc

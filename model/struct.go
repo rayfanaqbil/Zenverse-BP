@@ -8,6 +8,7 @@ import (
 
 	type Games struct {
 		ID          primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty" example:"123456789"`
+		EncryptedID   string            `bson:"encrypted_id,omitempty" json:"encrypted_id,omitempty"`
 		Name        string             `bson:"name,omitempty" json:"name,omitempty" example:"Valorant"`
 		Rating      float64            `bson:"rating,omitempty" json:"rating,omitempty" example:"123.12"`
 		Release     primitive.DateTime `bson:"release_date,omitempty" json:"release_date,omitempty" swaggertype:"string" example:"2024-09-01T00:00:00Z" format:"date-time"`
