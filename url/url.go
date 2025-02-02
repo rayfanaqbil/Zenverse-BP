@@ -22,6 +22,7 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Get("/games/rating", controller.GetGamesByRating)
     page.Get("/games/search", controller.GetGameByName)
     page.Get("/games/:id", controller.GetGamesByID)
+    page.Get("/encrypt", controller.EncryptIDHandler)
     page.Put("/update/:id", controller.UpdateDataGames)
     page.Delete("/delete/:id", controller.DeleteGamesByID)
     page.Get("/docs/*", swagger.HandlerDefault)
