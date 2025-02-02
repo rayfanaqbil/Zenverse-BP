@@ -45,32 +45,39 @@ func GetAllGames(c *fiber.Ctx) error {
 // @Failure 500
 // @Router /games/{id} [get]
 func GetGamesByID(c *fiber.Ctx) error {
-    id := c.Params("id")
-    if id == "" {
-        return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-            "status":  http.StatusBadRequest,
-            "message": "Missing ID parameter",
-        })
-    }
+	encryptedID := c.Params("id")
+	if encryptedID == "" {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Missing ID parameter",
+		})
+	}
 
-    objID, err := primitive.ObjectIDFromHex(id)
-    if err != nil {
-        return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-            "status":  http.StatusBadRequest,
-            "message": "Invalid ID format",
-        })
-    }
+	decryptedID, err := config.DecryptID(encryptedID)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid ID format",
+		})
+	}
 
-    game, err := cek.GetGamesByID(objID, config.Ulbimongoconn, "Games")
-    if err != nil {
-        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-            "status":  http.StatusInternalServerError,
-            "message": err.Error(),
-        })
-    }
+	objID, err := primitive.ObjectIDFromHex(decryptedID)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Invalid ObjectID format",
+		})
+	}
 
+	game, err := cek.GetGamesByID(objID, config.Ulbimongoconn, "Games")
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
 
-    return c.Status(http.StatusOK).JSON(game)
+	return c.Status(http.StatusOK).JSON(game)
 }
 
 
