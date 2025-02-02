@@ -2,9 +2,10 @@ package helper
 
 import (
     "context"
-     "errors"
-     "regexp"
+    "errors"
+    "regexp"
     "go.mongodb.org/mongo-driver/bson"
+    iniconfig "github.com/rayfanaqbil/zenverse-BE/v2/config"
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/bson/primitive"
     "github.com/rayfanaqbil/zenverse-BE/v2/model"
@@ -30,10 +31,10 @@ func GetAdminByID(db *mongo.Database, col string, adminID string) (*model.Admin,
 
 func ValidateUpdateInput(username, name string) error {
     if len(username) < 3 || len(name) < 3 {
-        return errors.New("Username and Name must be at least 3 characters long")
+        return errors.New("username and name must be at least 3 characters long")
     }
     if match, _ := regexp.MatchString(`^[a-zA-Z0-9_]+$`, username); !match {
-        return errors.New("Username can only contain alphanumeric characters and underscores")
+        return errors.New("username can only contain alphanumeric characters and underscores")
     }
     return nil
 }
@@ -54,14 +55,18 @@ func ValidateLoginInput(username, password string) error {
 func UpdateAdminPassword(db *mongo.Database, col string, adminID string, newPassword string) error {
     collection := db.Collection(col)
 
+    hashedPassword, err := iniconfig.HashPassword(newPassword)
+    if err != nil {
+        return err
+    }
+
     filter := bson.M{"_id": adminID}
     update := bson.M{
         "$set": bson.M{
-            "password": newPassword,
+            "password": hashedPassword,
         },
     }
 
-    _, err := collection.UpdateOne(context.Background(), filter, update)
+    _, err = collection.UpdateOne(context.Background(), filter, update)
     return err
 }
-
