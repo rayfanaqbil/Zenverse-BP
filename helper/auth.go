@@ -5,7 +5,7 @@ import (
     "errors"
     "regexp"
     "go.mongodb.org/mongo-driver/bson"
-    iniconfig "github.com/rayfanaqbil/zenverse-BE/v2/config"
+    "time"
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/bson/primitive"
     "github.com/rayfanaqbil/zenverse-BE/v2/model"
@@ -52,21 +52,17 @@ func ValidateLoginInput(username, password string) error {
     return nil
 }
 
-func UpdateAdminPassword(db *mongo.Database, col string, adminID string, newPassword string) error {
-    collection := db.Collection(col)
+func UpdateAdminPassword(db *mongo.Database, collectionName, adminID, newHashedPassword string) error {
+    collection := db.Collection(collectionName)
 
-    hashedPassword, err := iniconfig.HashPassword(newPassword)
+    objID, err := primitive.ObjectIDFromHex(adminID)
     if err != nil {
         return err
     }
 
-    filter := bson.M{"_id": adminID}
-    update := bson.M{
-        "$set": bson.M{
-            "password": hashedPassword,
-        },
-    }
+    filter := bson.M{"_id": objID} 
+    update := bson.M{"$set": bson.M{"password": newHashedPassword, "updated_at": time.Now()}}
 
-    _, err = collection.UpdateOne(context.Background(), filter, update)
+    _, err = collection.UpdateOne(context.TODO(), filter, update)
     return err
 }

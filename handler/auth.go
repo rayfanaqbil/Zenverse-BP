@@ -248,6 +248,16 @@ func UpdatePasswordAdmin(c *fiber.Ctx) error {
         })
     }
 
+    err = module.DeleteTokenFromMongoDB(config.Ulbimongoconn, "tokens", storedAdmin.ID.Hex())
+    if err != nil {
+        fmt.Println("Error deleting old token:", err)
+    }
+
+    err = module.AddToBlacklist(config.Ulbimongoconn, "blacklist", storedAdmin.ID.Hex())
+    if err != nil {
+        fmt.Println("Error blacklisting old token:", err)
+    }
+
 	csrfToken := generateRandomString(32)
 	SetCSRFTokenCookie(c, csrfToken)
 
