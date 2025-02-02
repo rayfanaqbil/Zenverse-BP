@@ -148,6 +148,10 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/rayfanaqbil/zenverse-BE/v2 v2.3.13 h1:x6CD+fltgtbvI8jossjxP2MjD5XHyjyAsqEn+C6ifeQ=
 github.com/rayfanaqbil/zenverse-BE/v2 v2.3.13/go.mod h1:iRpIwulv4VsXVBkw3pLsLwO724Sd+7HnB8AK5uQtH70=
+github.com/rayfanaqbil/zenverse-BE/v2 v2.3.14 h1:5U+1newzr4/UrTocmHlDrqwDXZfoxvVO1Nt+se0LBrw=
+github.com/rayfanaqbil/zenverse-BE/v2 v2.3.14/go.mod h1:iRpIwulv4VsXVBkw3pLsLwO724Sd+7HnB8AK5uQtH70=
+github.com/rayfanaqbil/zenverse-BE/v2 v2.3.15 h1:aQLXHzTqVRlfr3/Eqz71uhEwVG7KJnRLqa3wGxeZfno=
+github.com/rayfanaqbil/zenverse-BE/v2 v2.3.15/go.mod h1:iRpIwulv4VsXVBkw3pLsLwO724Sd+7HnB8AK5uQtH70=
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=

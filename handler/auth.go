@@ -120,7 +120,6 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
-	// Check if username already exists
 	existingAdmin, err := module.GetAdminByUsername(config.Ulbimongoconn, "Admin", newAdmin.User_name)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
@@ -135,7 +134,6 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
-	// Hash password
 	hashedPassword, err := iniconfig.HashPassword(newAdmin.Password)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
@@ -144,8 +142,8 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
-	// Save admin to database
-	insertedID, err := module.InsertAdmin(config.Ulbimongoconn, "Admin", newAdmin.User_name, hashedPassword, newAdmin.Email)
+	
+	insertedID, err := module.InsertAdmin(config.Ulbimongoconn, "Admin", newAdmin.User_name, hashedPassword, newAdmin.Name)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  http.StatusInternalServerError,
