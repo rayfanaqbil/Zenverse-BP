@@ -103,6 +103,37 @@ func EncryptIDHandler(c *fiber.Ctx) error {
     })
 }
 
+func DecryptIDHandler(c *fiber.Ctx) error {
+    key, err := config.GetEncryptionKey()
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": err.Error(),
+        })
+    }
+
+    encryptedID := c.Query("encrypted_id")
+    if encryptedID == "" {
+        return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+            "status":  http.StatusBadRequest,
+            "message": "Missing encrypted_id parameter",
+        })
+    }
+
+    decryptedID, err := config.DecryptID(key, encryptedID)
+    if err != nil {
+        return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+            "status":  http.StatusInternalServerError,
+            "message": "Failed to decrypt ID",
+        })
+    }
+
+    return c.JSON(fiber.Map{
+        "decrypted_id": decryptedID,
+    })
+}
+
+
 
 
 
