@@ -101,7 +101,7 @@ func EncryptIDHandler(c *fiber.Ctx) error {
         "encrypted_id": encryptedID,
     })
 }
-
+//Description
 func DecryptIDHandler(c *fiber.Ctx) error {
     key, err := config.GetEncryptionKey()
     if err != nil {
