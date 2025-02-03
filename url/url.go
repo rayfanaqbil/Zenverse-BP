@@ -45,6 +45,5 @@ func Web(page *fiber.App, db *mongo.Database) {
 	)
 
     page.Use(middleware.AuthMiddleware(), middleware.CSRFProtection())  
-    page.Get("/dashboard", handler.DashboardPage)
-    page.Put("/update/:id", controller.UpdateDataGames)  
+    page.Get("/dashboard", handler.DashboardPage) 
 }

@@ -31,12 +31,6 @@ func main() {
 	site := fiber.New(config.Iteung)
 	site.Use(cors.New(config.Cors))
 
-	err := modul.CreateTTLIndex(config.Ulbimongoconn, "blacklist")
-    if err != nil {
-        log.Fatalf("Failed to create TTL index: %v", err)
-    }
-
-
 	// Tambahkan middleware COOP dan COEP
 	site.Use(config.CoopCoepMiddleware())
 
