@@ -40,7 +40,6 @@ func Web(page *fiber.App, db *mongo.Database) {
 
     page.Post("/insert-game",
 		middleware.RateLimiter(),
-		middleware.CSRFProtection(),
 		controller.InsertDataGames,
 	)
 
