@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
-	modul "github.com/rayfanaqbil/zenverse-BE/v2/module"
 	"github.com/aiteung/musik"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 
