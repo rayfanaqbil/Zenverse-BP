@@ -24,6 +24,7 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Get("/games/:id", controller.GetGamesByID)
     page.Get("/encrypt", controller.EncryptIDHandler)
     page.Get("/decrypt", controller.DecryptIDHandler)
+    page.Put("/update/:id", controller.UpdateDataGames)
     page.Delete("/delete/:id", controller.DeleteGamesByID)
     page.Get("/docs/*", swagger.HandlerDefault)
     page.Post("/login", handler.Login) 
