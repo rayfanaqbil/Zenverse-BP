@@ -8,7 +8,6 @@ import (
 	"github.com/aiteung/musik"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
-	"github.com/rayfanaqbil/Zenverse-BP/middleware"
 	inimodel "github.com/rayfanaqbil/zenverse-BE/v2/model"
 	cek "github.com/rayfanaqbil/zenverse-BE/v2/module"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -150,9 +149,6 @@ func DecryptIDHandler(c *fiber.Ctx) error {
 // @Failure 500
 // @Router /insert [post]
 func InsertDataGames(c *fiber.Ctx) error {
-	if err := middleware.VerifyCSRFToken(c); err != nil {
-		return err
-	}
 	db := config.Ulbimongoconn
 	var games inimodel.Games
 	if err := c.BodyParser(&games); err != nil {
