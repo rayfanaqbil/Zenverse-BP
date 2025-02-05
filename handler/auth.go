@@ -63,14 +63,10 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	csrfToken := generateRandomString(32)
-    SetCSRFTokenCookie(c, csrfToken)
-
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status":     http.StatusOK,
 		"message":    "Login successful",
-		"token":      token,                      
-		"csrf_token": csrfToken,                  
+		"token":      token,                                       
 	})
 }
 
