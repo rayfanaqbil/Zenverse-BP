@@ -375,7 +375,16 @@ func GetGamesByRating(c *fiber.Ctx) error {
     return c.Status(fiber.StatusOK).JSON(filteredGames)
 }
 
-func GetAllGamesApps(c *fiber.Ctx) error { 
-	ps := cek.GetAllDataGamesApps(config.Ulbimongoconn, "Games")
+func GetAllGamesApps(c *fiber.Ctx) error {
+	skipParam := c.Query("skip", "0")
+	
+	skip, err := strconv.ParseInt(skipParam, 10, 64)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid skip parameter",
+		})
+	}
+
+	ps := cek.GetAllDataGamesApps(config.Ulbimongoconn, "Games", skip)
 	return c.JSON(ps)
 }
