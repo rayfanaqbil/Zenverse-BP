@@ -374,3 +374,8 @@ func GetGamesByRating(c *fiber.Ctx) error {
 
     return c.Status(fiber.StatusOK).JSON(filteredGames)
 }
+
+func GetAllGamesApps(c *fiber.Ctx) error { 
+	ps := cek.GetAllDataGamesApps(config.Ulbimongoconn, "Games")
+	return c.JSON(ps)
+}

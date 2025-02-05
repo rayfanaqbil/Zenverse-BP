@@ -19,6 +19,7 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Options("/", controller.Sink)
 
     page.Get("/games", controller.GetAllGames)
+    page.Get("/games/apps", controller.GetAllGamesApps)
     page.Get("/games/rating", controller.GetGamesByRating)
     page.Get("/games/search", controller.GetGameByName)
     page.Get("/games/:id", controller.GetGamesByID)

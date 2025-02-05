@@ -150,6 +150,8 @@ github.com/rayfanaqbil/zenverse-BE/v2 v2.3.15 h1:aQLXHzTqVRlfr3/Eqz71uhEwVG7KJnR
 github.com/rayfanaqbil/zenverse-BE/v2 v2.3.15/go.mod h1:iRpIwulv4VsXVBkw3pLsLwO724Sd+7HnB8AK5uQtH70=
 github.com/rayfanaqbil/zenverse-BE/v2 v2.3.17 h1:Ww0+7ylm9nUrTfcHv49BvLOg5+MMJ7ilc52Bx7d4gzE=
 github.com/rayfanaqbil/zenverse-BE/v2 v2.3.17/go.mod h1:iRpIwulv4VsXVBkw3pLsLwO724Sd+7HnB8AK5uQtH70=
+github.com/rayfanaqbil/zenverse-BE/v2 v2.3.19 h1:G7GXxUhRqgoea49wansBBEhG7nGNNIDN/DDKI3yFBaI=
+github.com/rayfanaqbil/zenverse-BE/v2 v2.3.19/go.mod h1:iRpIwulv4VsXVBkw3pLsLwO724Sd+7HnB8AK5uQtH70=
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
