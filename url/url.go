@@ -29,6 +29,7 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Delete("/delete/:id", controller.DeleteGamesByID)
     page.Get("/docs/*", swagger.HandlerDefault)
     page.Post("/login", handler.Login) 
+    page.Post("/upload/img", controller.PostUploadGithub) 
     page.Post("/logout", handler.Logout)   
     page.Post("/registeradmin", handler.Register)
     page.Get("/csrf-token", handler.GenerateCSRFToken)
