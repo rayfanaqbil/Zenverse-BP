@@ -28,3 +28,5 @@ var (
 		Endpoint: google.Endpoint,
 	}
 )
+
+var GHAccessToken string = os.Getenv("GH_ACCESS_TOKEN")
