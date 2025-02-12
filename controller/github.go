@@ -41,7 +41,7 @@ func PostUploadGithub(c *fiber.Ctx) error {
 
 	content, _, err := helper.GithubUpload(
 		gh.GitHubAccessToken, gh.GitHubAuthorName, gh.GitHubAuthorEmail, file, 
-		"parkirgratis", "filegambar", pathFile, false,
+		"zenverse-assets", "filegambarzenverse", pathFile, false,
 	)
 
 	if err != nil {
