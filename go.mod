@@ -1,6 +1,8 @@
 module github.com/rayfanaqbil/Zenverse-BP
 
-go 1.22.0
+go 1.22.3
+
+toolchain go1.23.3
 
 require (
 	github.com/aiteung/atdb v0.1.7
@@ -11,6 +13,7 @@ require (
 	github.com/google/go-github/v59 v59.0.0
 	github.com/rayfanaqbil/zenverse-BE/v2 v2.4.1
 	github.com/swaggo/swag v1.16.3
+	github.com/whatsauth/itmodel v0.0.8
 	github.com/whatsauth/whatsauth v0.1.82
 	go.mau.fi/whatsmeow v0.0.0-20240603101645-64bc969fbe78
 	go.mongodb.org/mongo-driver v1.17.1

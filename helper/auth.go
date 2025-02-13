@@ -3,6 +3,7 @@ package helper
 import (
     "context"
     "errors"
+    "github.com/gofiber/fiber/v2"
     "regexp"
     "go.mongodb.org/mongo-driver/bson"
     "time"
@@ -65,4 +66,12 @@ func UpdateAdminPassword(db *mongo.Database, collectionName, adminID, newHashedP
 
     _, err = collection.UpdateOne(context.TODO(), filter, update)
     return err
+}
+
+func GetSecretFromHeader(c *fiber.Ctx) string {
+	secret := c.Get("secret") 
+	if secret == "" {
+		secret = c.Get("Secret")
+	}
+	return secret
 }

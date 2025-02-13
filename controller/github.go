@@ -2,67 +2,62 @@ package controller
 
 import (
 	"fmt"
-	"github.com/rayfanaqbil/Zenverse-BP/model"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rayfanaqbil/Zenverse-BP/config"
 	"github.com/rayfanaqbil/Zenverse-BP/helper"
+	"github.com/rayfanaqbil/Zenverse-BP/model"
 	"go.mongodb.org/mongo-driver/bson"
+	"github.com/whatsauth/itmodel"
 )
 
 func PostUploadGithub(c *fiber.Ctx) error {
+	var respn itmodel.Response
+
 	fmt.Println("Starting file upload process")
 
-
-	file, err := c.FormFile("img")
+	header, err := c.FormFile("img")
 	if err != nil {
 		fmt.Println("Error parsing form file:", err)
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		respn.Response = err.Error()
+		return c.Status(fiber.StatusBadRequest).JSON(respn)
 	}
 
-	folder := c.Query("folder", "") 
+	folder := helper.GetParam(c)
 	var pathFile string
 	if folder != "" {
-		pathFile = folder + "/" + file.Filename
+		pathFile = folder + "/" + header.Filename
 	} else {
-		pathFile = file.Filename
+		pathFile = header.Filename
 	}
-
 
 	gh, err := helper.GetOneDoc[model.Ghcreates](config.Ulbimongoconn, "github", bson.M{})
 	if err != nil {
 		fmt.Println("Error fetching GitHub credentials:", err)
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		respn.Info = helper.GetSecretFromHeader(c)
+		respn.Response = err.Error()
+		return c.Status(fiber.StatusConflict).JSON(respn)
 	}
 
-
 	content, _, err := helper.GithubUpload(
-		gh.GitHubAccessToken, gh.GitHubAuthorName, gh.GitHubAuthorEmail, file, 
-		"zenverse-assets", "filegambarzenverse", pathFile, false,
+		gh.GitHubAccessToken, gh.GitHubAuthorName, gh.GitHubAuthorEmail, header,
+		"rayfanaqbil", "filegambarzenverse", pathFile, false,
 	)
 
 	if err != nil {
 		fmt.Println("Error uploading file to GitHub:", err)
-		return c.Status(fiber.StatusExpectationFailed).JSON(fiber.Map{
-			"error": "Gagal upload ke GitHub",
-			"detail": err.Error(),
-		})
+		respn.Info = "Gagal upload ke GitHub"
+		respn.Response = err.Error()
+		return c.Status(fiber.StatusExpectationFailed).JSON(respn)
 	}
 
 	if content == nil || content.Content == nil {
 		fmt.Println("Error: content or content.Content is nil")
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Error uploading file",
-		})
+		respn.Response = "Error uploading file"
+		return c.Status(fiber.StatusInternalServerError).JSON(respn)
 	}
 
+	respn.Info = *content.Content.Name
+	respn.Response = *content.Content.Path
 	fmt.Println("File upload process completed successfully")
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"name": *content.Content.Name,
-		"path": *content.Content.Path,
-	})
+	return c.Status(fiber.StatusOK).JSON(respn)
 }
