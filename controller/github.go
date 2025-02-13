@@ -40,7 +40,7 @@ func PostUploadGithub(c *fiber.Ctx) error {
 
 	content, _, err := helper.GithubUpload(
 		gh.GitHubAccessToken, gh.GitHubAuthorName, gh.GitHubAuthorEmail, header,
-		"rayfanaqbil", "filegambarzenverse", pathFile, false,
+		"zenith-infinitity", "img-repository", pathFile, false,
 	)
 
 	if err != nil {
