@@ -32,6 +32,7 @@ func Web(page *fiber.App, db *mongo.Database) {
     page.Post("/upload/img", controller.PostUploadGithub) 
     page.Post("/logout", handler.Logout)   
     page.Post("/registeradmin", handler.Register)
+    page.Post("/insert-gameadmin", controller.InsertDataGamesAdmin)
     page.Get("/csrf-token", handler.GenerateCSRFToken)
     page.Post("/insert-game",
     middleware.RateLimiter(),

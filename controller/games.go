@@ -134,9 +134,6 @@ func DecryptIDHandler(c *fiber.Ctx) error {
 
 
 
-
-
-
 // InsertDataGames godoc
 // @Summary Insert data Games.
 // @Description Input data games.
@@ -170,6 +167,49 @@ func InsertDataGames(c *fiber.Ctx) error {
 
 	if games.Rating == 0 {
 		games.Rating = 1.0
+	}
+
+	insertedID, err := cek.InsertGames(db, "Games",
+		games.Name,
+		games.Rating,
+		games.Desc,
+		games.Genre,
+		games.Dev_name,
+		games.Game_banner,
+		games.Preview,
+		games.Link_games,
+		games.Game_logo)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"status":      http.StatusOK,
+		"message":     "Data berhasil disimpan.",
+		"inserted_id": insertedID,
+	})
+}
+
+func InsertDataGamesAdmin(c *fiber.Ctx) error {
+	db := config.Ulbimongoconn
+	var games inimodel.Games
+	if err := c.BodyParser(&games); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	if games.Name == "" || games.Desc == "" || len(games.Genre) == 0 ||
+    games.Dev_name.Name == "" ||  games.Dev_name.Bio == "" ||
+	games.Game_banner == "" || games.Preview == "" ||
+     games.Link_games == "" || games.Game_logo == "" {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  http.StatusBadRequest,
+			"message": "Fill all the form.",
+		})
 	}
 
 	insertedID, err := cek.InsertGames(db, "Games",
